@@ -21,6 +21,7 @@ class EnvDrawer:
         self.drawDone()
         self.drawStartEndPoint()
         self.graphics.renderGrid(BASE_COLOR["BLACK"])  # Draw this last to avoid overlap
+        # Có thể cải tiến render đồng bộ
 
     def drawMapBorder(self):
         for p in self.env.borderPoints:

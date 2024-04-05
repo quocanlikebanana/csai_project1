@@ -14,6 +14,7 @@ class Graphics:
         self.MAR_X = 0
         self.MAR_Y = 0
         self.BASE_WINDOW_HEIGHT = 600
+        self.MAX_FPS = 1000
         self.BASE_WINDOW_WIDTH = math.ceil(
             (env.ncol / env.nrow) * self.BASE_WINDOW_HEIGHT
         )
@@ -48,6 +49,7 @@ class Graphics:
         pygame.display.set_caption("Path Finding")
         self.clock = pygame.time.Clock()
         self.updateBlockSize()
+        self.clock.tick(MAX_FPS)
 
         # Loop
         while True:

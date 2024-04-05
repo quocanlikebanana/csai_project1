@@ -1,6 +1,5 @@
 from enum import Enum
 import math
-import time
 from algorithm.priorityqueue import PriorityQueue
 from component.enviroment import Enviroment
 from component.point import Point
@@ -118,7 +117,6 @@ class AStar:
         if self.searching == False:
             return False
         else:
-            time.sleep(0.0001)
             currentNode = self.open.delete()
             self.close.insert(currentNode)
             if currentNode != self.startNode:
