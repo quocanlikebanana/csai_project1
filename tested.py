@@ -1,6 +1,7 @@
 from algorithm.astar import *
 from component.enviroment import Enviroment
-from component.point import Point, ConstantOrbit
+from component.moving import LinearOrbit, ConstantOrbit
+from component.point import Point
 from component.polygon import Polygon
 from graphics.drawer import Drawer
 
@@ -41,3 +42,29 @@ def test1():
 
 
 test1()
+
+
+def test3():
+    pl = [
+        Polygon(
+            [
+                Point(2, 4),
+                Point(14, 2),
+                Point(21, 17),
+                Point(3, 21),
+                Point(5, 13),
+                Point(25, 7),
+            ],
+            LinearOrbit([Point(1, 2), Point(1, 7), Point(4, 2)], 10),
+        ),
+        Polygon(
+            [Point(1, 10), Point(1, 8), Point(6, 8)],
+            ConstantOrbit([Point(3, 4), Point(3, 5)], 5),
+        ),
+    ]
+    env = Enviroment(30, 25, Point(1, 1), Point(28, 23), [], pl)
+    md = Drawer(env)
+    md.runDraw()
+
+
+test3()

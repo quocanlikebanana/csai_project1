@@ -7,7 +7,7 @@ from component.enviroment import Enviroment
 from component.point import Point
 from graphics.color import BASE_COLOR
 
-MAX_FPS = 23
+MAX_FPS = 100
 
 
 class Graphics:
@@ -38,6 +38,12 @@ class Graphics:
         top = self.MAR_Y + self.blocksize_y * point.y
         return left, top
 
+    def onEveryFrameDrawn(self):
+        self.env.updateMovement()
+        if self.runAlgorithmOnce != None:
+            self.runAlgorithmOnce()
+        pass
+
     def runRender(self) -> None:
         pygame.init()
         self.surface = pygame.display.set_mode(
@@ -55,8 +61,7 @@ class Graphics:
         while True:
             self.surface.fill(BASE_COLOR["WHITE"])
             self.runDraw()
-            self.env.update()
-            self.runAlgorithmOnce()
+            self.onEveryFrameDrawn()
             pygame.display.update()
             # Event
             for event in pygame.event.get():

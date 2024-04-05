@@ -1,4 +1,4 @@
-from component.point import Point
+from component.point import Point, Vector
 from component.polygon import Polygon
 
 
@@ -21,8 +21,8 @@ class Enviroment:
         self.borderPoints: list[Point] = []
         self._updateBorderPoints()
         self.polyPoints = set([p for po in self.polygons for p in po.points])
-        if self.validateEnv() == False:
-            raise ValueError(1, "invalid eviroment")
+        self._validateEnv()
+        ## After this, the enviroment is valid
         self.blockPoints: list[Point] = []
         self._updateBlockPoints()
         self.openedPoints: list[Point] = []
@@ -42,9 +42,11 @@ class Enviroment:
             self.borderPoints.append(Point(0, y))
             self.borderPoints.append(Point(self.ncol - 1, y))
 
-    def update(self):
+    def updateMovement(self):
         for p in self.polygons:
-            p.updateMoving()
+            pmv = p.getPesudoMoving()
+            if self.validatePolygonVertices(pmv, p):
+                p.move(pmv)
 
     def _checkInRange(self, point: Point) -> bool:
         # Border is 1 pixel
@@ -62,27 +64,39 @@ class Enviroment:
             return False
         return True
 
-    def validateEnv(self):
+    # vertices might not from polygon, it could be pesudo ones
+    def validatePolygonVertices(self, vertices: list[Point], polygon: Polygon) -> bool:
+        testEdgePoints: list[Point] = []
+        vLen = len(vertices)
+        for i in range(0, vLen):
+            vec = Vector(vertices[i - 1], vertices[i])
+            for p in vec.points:
+                testEdgePoints.append(p)
+        for v in testEdgePoints:
+            if not self._checkInRange(v):
+                return False
+            # Check for crossed polygon: NOT CORRECT: it could
+            otherPolyPoints = [
+                point
+                for expoly in self.polygons
+                if expoly != polygon
+                for point in expoly.points
+            ]
+            if v in otherPolyPoints:
+                return False
+        return True
+
+    def _validateEnv(self):
         if not self.validatePosition(self.startPoint) or not self.validatePosition(
             self.endPoint
         ):
-            return False
+            raise ValueError("invalid startpont / endpoint")
         for poly in self.pickupPoints:
             if not self.validatePosition(poly):
-                return False
+                raise ValueError("invalid pickup points")
         for poly in self.polygons:
-            for v in poly.vertices:
-                if not self._checkInRange(v):
-                    return False
-                # Check crossed polygon
-                otherPolyPoints = [
-                    point
-                    for expoly in self.polygons
-                    if expoly != poly
-                    for point in expoly.points
-                ]
-                if v in otherPolyPoints:
-                    return False
+            if self.validatePolygonVertices(poly.vertices, poly) == False:
+                raise ValueError("invalid polygons")
         return True
 
     def validatePosition(self, pos: Point):

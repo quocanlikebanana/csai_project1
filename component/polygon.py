@@ -1,8 +1,9 @@
-from component.point import MovingPoint, Vector, Point, ConstantOrbit
+from component.moving import ConstantOrbit, MovingPoint, LinearOrbit, RatioOrbit
+from component.point import Vector, Point
 
 
 class Polygon:
-    def __init__(self, vertices: list[Point], orbit: ConstantOrbit):
+    def __init__(self, vertices: list[Point], orbit: RatioOrbit = None):
         self.vertices: list[Point] = []
         if validate(vertices):
             self.vertices = vertices
@@ -99,17 +100,27 @@ class Polygon:
 
     def _updateTranslates(self):
         # translates = self.orbit.getOrbit() # Will cause error because same reference to orbit
-        for v in self.vertices:
-            self.movingVertices.append(MovingPoint(v, self.orbit.getOrbit()))
+        if self.orbit != None:
+            for v in self.vertices:
+                self.movingVertices.append(MovingPoint(v, self.orbit.getOrbit()))
         pass
 
     # when speed is applied
-    def updateMoving(self):
-        self.vertices.clear()
+
+    # this will change states to creates the feeling of being blocked
+    def getPesudoMoving(self) -> list[Point]:
+        if self.orbit == None:
+            return self.vertices.copy()
+        pesudoMoveVertices: list[Point] = []
         for mv in self.movingVertices:
             mv.move()
             p = mv.getPoint()
-            self.vertices.append(p)
+            pesudoMoveVertices.append(p)
+        return pesudoMoveVertices
+
+    def move(self, pesudoMoveVertices):
+        self.vertices.clear()
+        self.vertices = pesudoMoveVertices
         self._updateEdges()
         self._updateInternalPoints()
         pass

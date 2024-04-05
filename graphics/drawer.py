@@ -5,7 +5,7 @@ from component.enviroment import Enviroment
 
 
 class Drawer:
-    def __init__(self, env: Enviroment, runAlgorithmOnce) -> None:
+    def __init__(self, env: Enviroment, runAlgorithmOnce=None) -> None:
         self.env = env
         self.polycolors = genRandomDistinctColor(len(self.env.polygons))
         self.graphics = Graphics(env, self.runDraw, runAlgorithmOnce)

@@ -23,6 +23,9 @@ class Point:
     def getAbsDistance(self, dest) -> float:
         return math.sqrt((dest.x - self.x) ** 2 + (dest.y - self.y) ** 2)
 
+    def getMattathanDistance(self, dest) -> float:
+        return abs((dest.x - self.x) + (dest.y - self.y))
+
 
 class Vector:
     def __init__(self, start: Point, end: Point):
@@ -31,7 +34,7 @@ class Vector:
         self.points: list[Point] = []
         self.slope: int = None
         self.intercept: int = None
-        self._init()
+        self._update()
         self.draftStart = start
         self.draftPoints = self.points.copy()
 
@@ -70,7 +73,7 @@ class Vector:
         self.draftPoints.clear()
 
     # Init
-    def _init(self):
+    def _update(self):
         if self.end.y == self.start.y:
             self.slope = 0
         elif self.end.x == self.start.x:
@@ -95,69 +98,3 @@ class Vector:
             for y in range(self.start.y, self.end.y, dir):
                 self.points.append(Point(self.start.x, y))
         self.points.append(self.end)
-
-
-# velocity is pixel moved per tick
-class Translate:
-    def __init__(self, start: Point, end: Point, time: float) -> None:
-        self.vx = (end.x - start.x) / time
-        self.vy = (end.y - start.y) / time
-        self.time = time
-        self.progress = time
-        pass
-
-    def getV(self) -> tuple[float, float]:
-        if self.progress <= 0:
-            raise ValueError()
-        self.progress -= 1  # moved vx, vy pixel on 1 tick
-        return self.vx, self.vy
-
-    def reloadProgress(self):
-        self.progress = self.time
-
-    def isDone(self) -> bool:
-        return self.progress <= 0
-
-
-class ConstantOrbit:
-    def __init__(self, points: list[Point], totalTime: float) -> None:
-        self.points = points
-        self.totalTime = totalTime
-
-    def getOrbit(self) -> list[Translate]:
-        lp = len(self.points)
-        if lp <= 1:
-            return []
-        totalDistance = 0
-        for i in range(lp):
-            curp = self.points[i]
-            nexp = self.points[(i + 1) % lp]
-            totalDistance += curp.getAbsDistance(nexp)
-        orbit: list[Translate] = []
-        for i in range(lp):
-            curp = self.points[i]
-            nexp = self.points[(i + 1) % lp]
-            time = (curp.getAbsDistance(nexp) / totalDistance) * self.totalTime
-            orbit.append(Translate(curp, nexp, time))
-        return orbit
-
-
-class MovingPoint:
-    def __init__(self, point: Point, translates: list[Translate]) -> None:
-        self.translates = translates
-        self.x = float(point.x)
-        self.y = float(point.y)
-        self.curTransId = 0
-
-    def move(self):
-        lTranslate = len(self.translates)
-        while self.translates[self.curTransId].isDone():
-            self.translates[self.curTransId].reloadProgress()
-            self.curTransId = (self.curTransId + 1) % lTranslate
-        translate = self.translates[self.curTransId]
-        vx, vy = translate.getV()
-        self.x = self.x + vx
-        self.y = self.y + vy
-
-    def getPoint(self) -> Point:
-        return Point(int(self.x), int(self.y))
