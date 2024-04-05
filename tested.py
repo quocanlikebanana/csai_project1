@@ -1,6 +1,6 @@
 from algorithm.astar import *
 from component.enviroment import Enviroment
-from component.point import Point, Velocity
+from component.point import Point, ConstantOrbit
 from component.polygon import Polygon
 from graphics.drawer import Drawer
 
@@ -16,7 +16,7 @@ def test2():
                 Point(9, 13),
                 Point(25, 7),
             ],
-            Velocity(0.5, 0),
+            ConstantOrbit(0.5, 0),
         ),
     ]
     env = Enviroment(30, 25, Point(1, 1), Point(28, 23), [], pl)

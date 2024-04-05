@@ -1,8 +1,8 @@
-from component.point import MovingPoint, Vector, Point, Velocity
+from component.point import MovingPoint, Vector, Point, ConstantOrbit
 
 
 class Polygon:
-    def __init__(self, vertices: list[Point], velocity: Velocity = Velocity(0, 0)):
+    def __init__(self, vertices: list[Point], orbit: ConstantOrbit):
         self.vertices: list[Point] = []
         if validate(vertices):
             self.vertices = vertices
@@ -10,7 +10,10 @@ class Polygon:
             raise ValueError("invalid vertices")
         self.edges: list[Vector] = []
         self.internalPoints: list[Point] = []
-        self.movingVertices = [MovingPoint(v, velocity) for v in vertices]
+        self.movingVertices: list[MovingPoint] = []
+        self.currentVelocity = None
+        self.orbit = orbit
+        self._updateTranslates()
         self._updateEdges()
         self._updateInternalPoints()  # No need To Fill
 
@@ -92,6 +95,12 @@ class Polygon:
                         xProjByY_MaxMin[y][i] + 1, xProjByY_MaxMin[y][i + 1]
                     ):
                         self.internalPoints.append(Point(x, y))
+        pass
+
+    def _updateTranslates(self):
+        # translates = self.orbit.getOrbit() # Will cause error because same reference to orbit
+        for v in self.vertices:
+            self.movingVertices.append(MovingPoint(v, self.orbit.getOrbit()))
         pass
 
     # when speed is applied
