@@ -7,6 +7,8 @@ from component.enviroment import Enviroment
 from component.point import Point
 from graphics.color import BASE_COLOR
 
+MAX_FPS = 1000
+
 
 class Graphics:
     def __init__(self, env: Enviroment, runinitdraw, runAlgorithmOnce) -> None:
@@ -14,7 +16,6 @@ class Graphics:
         self.MAR_X = 0
         self.MAR_Y = 0
         self.BASE_WINDOW_HEIGHT = 600
-        self.MAX_FPS = 1000
         self.BASE_WINDOW_WIDTH = math.ceil(
             (env.ncol / env.nrow) * self.BASE_WINDOW_HEIGHT
         )
