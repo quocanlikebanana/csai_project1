@@ -20,9 +20,9 @@ class Enviroment:
         self.polygons = polygons
         self.borderPoints: list[Point] = []
         self._updateBorderPoints()
-        self.polyPoints = [p for po in self.polygons for p in po.points]
-        if self._validateMap() == False:
-            raise ValueError("invalid point range")
+        self.polyPoints = set([p for po in self.polygons for p in po.points])
+        if self.validateEnv() == False:
+            raise ValueError(1, "invalid eviroment")
         self.blockPoints: list[Point] = []
         self._updateBlockPoints()
         self.openedPoints: list[Point] = []
@@ -58,18 +58,26 @@ class Enviroment:
             return False
         return True
 
-    def _validateMap(self):
+    def validateEnv(self):
         if not self.validatePosition(self.startPoint) or not self.validatePosition(
             self.endPoint
         ):
             return False
-        for p in self.pickupPoints:
-            if not self.validatePosition(p):
+        for poly in self.pickupPoints:
+            if not self.validatePosition(poly):
                 return False
-        for p in self.polygons:
-            for v in p.vertices:
-                # Check crossed polygon?
+        for poly in self.polygons:
+            for v in poly.vertices:
                 if not self._checkInRange(v):
+                    return False
+                # Check crossed polygon
+                otherPolyPoints = [
+                    point
+                    for expoly in self.polygons
+                    if expoly != poly
+                    for point in expoly.points
+                ]
+                if v in otherPolyPoints:
                     return False
         return True
 

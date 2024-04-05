@@ -4,14 +4,14 @@ from graphics.color import *
 from component.enviroment import Enviroment
 
 
-class EnvDrawer:
+class Drawer:
     def __init__(self, env: Enviroment, runAlgorithmOnce) -> None:
         self.env = env
         self.polycolors = genRandomDistinctColor(len(self.env.polygons))
-        self.graphics = Graphics(env, self.runInitDraw, runAlgorithmOnce)
+        self.graphics = Graphics(env, self.runDraw, runAlgorithmOnce)
         self.graphics.runRender()
 
-    def runInitDraw(self):
+    def runDraw(self):
         # Order decides
         self.drawMapBorder()
         self.drawPolygons()

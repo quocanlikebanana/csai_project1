@@ -123,6 +123,8 @@ class AStar:
         if self.searching == False:
             return False
         else:
+            if self.open.isEmpty():
+                raise ValueError("astar not found")
             currentNode = self.open.delete()
             self.close.insert(currentNode)
             if currentNode != self.startNode:
