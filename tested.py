@@ -35,3 +35,6 @@ def test2():
     astar = AStar(AS_Map(env), EuclideanHeuristic)
     md = EnvDrawer(env, astar.searchOnce)
     md.runInitDraw()
+
+
+test2()
