@@ -91,3 +91,23 @@ class Vector:
             for y in range(self.start.y, self.end.y, dir):
                 self.points.append(Point(self.start.x, y))
         self.points.append(self.end)
+
+
+class Velocity:
+    def __init__(self, vx: float, vy: float) -> None:
+        self.vx = vx
+        self.vy = vy
+
+
+class MovingPoint:
+    def __init__(self, point: Point, velo: Velocity) -> None:
+        self.velo = velo
+        self.x = point.x
+        self.y = point.y
+
+    def move(self):
+        self.x = self.x + self.velo.vx
+        self.y = self.y + self.velo.vy
+
+    def getPoint(self) -> Point:
+        return Point(int(self.x), int(self.y))

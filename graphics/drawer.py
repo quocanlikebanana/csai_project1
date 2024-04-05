@@ -59,4 +59,4 @@ class Drawer:
     def drawDone(self):
         for p in self.env.donePoints:
             self.graphics.renderFilledPixel(p, BASE_COLOR["YELLOW"])
-            self.graphics.renderSymbolPixel(p, "x")
+            self.graphics.renderSymbolPixel(p, "+")

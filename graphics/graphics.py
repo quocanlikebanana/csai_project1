@@ -55,6 +55,7 @@ class Graphics:
         while True:
             self.surface.fill(BASE_COLOR["WHITE"])
             self.runDraw()
+            self.env.update()
             self.runAlgorithmOnce()
             pygame.display.update()
             # Event

@@ -42,6 +42,10 @@ class Enviroment:
             self.borderPoints.append(Point(0, y))
             self.borderPoints.append(Point(self.ncol - 1, y))
 
+    def update(self):
+        for p in self.polygons:
+            p.updateMoving()
+
     def _checkInRange(self, point: Point) -> bool:
         # Border is 1 pixel
         if (
