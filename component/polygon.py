@@ -1,8 +1,9 @@
+from component.moving import ConstantOrbit, MovingPoint, LinearOrbit, RatioOrbit
 from component.point import Vector, Point
 
 
 class Polygon:
-    def __init__(self, vertices: list[Point]):
+    def __init__(self, vertices: list[Point], orbit: RatioOrbit = None):
         self.vertices: list[Point] = []
         if validate(vertices):
             self.vertices = vertices
@@ -10,8 +11,12 @@ class Polygon:
             raise ValueError("invalid vertices")
         self.edges: list[Vector] = []
         self.internalPoints: list[Point] = []
-        self.updateEdges()
-        self.updateInternalPoints()
+        self.movingVertices: list[MovingPoint] = []
+        self.currentVelocity = None
+        self.orbit = orbit
+        self._updateTranslates()
+        self._updateEdges()
+        self._updateInternalPoints()  # No need To Fill
 
     @property
     def points(self):
@@ -19,13 +24,16 @@ class Polygon:
         setIntern = set(self.internalPoints)
         return list(setEdge | setIntern)
 
-    def updateEdges(self):
+    def _updateEdges(self):
+        self.edges.clear()
         vLen = len(self.vertices)
         for i in range(0, vLen):
             vec = Vector(self.vertices[i - 1], self.vertices[i])
             self.edges.append(vec)
 
-    def updateInternalPoints(self):
+    def _updateInternalPoints(self):
+        self.internalPoints.clear()
+
         # Since its a polygon so max/min point are all a vertex
         max_y = max(self.vertices, key=lambda x: x.y).y
         min_y = min(self.vertices, key=lambda x: x.y).y
@@ -88,16 +96,33 @@ class Polygon:
                         xProjByY_MaxMin[y][i] + 1, xProjByY_MaxMin[y][i + 1]
                     ):
                         self.internalPoints.append(Point(x, y))
+        pass
 
-        # for y in xProjByY_MaxMin:
-        #     addPoint = None
-        #     addFlag = False
-        #     for x in range(min_x, max_x + 1):
-        #         if addFlag == True:
-        #             self.internalPoints.append(Point(x, y))
-        #         if addPoint != None and x == addPoint:
-        #             self.internalPoints.append(Point(x, y))
-        #         if x == xProjByY_MaxMin[y]
+    def _updateTranslates(self):
+        # translates = self.orbit.getOrbit() # Will cause error because same reference to orbit
+        if self.orbit != None:
+            for v in self.vertices:
+                self.movingVertices.append(MovingPoint(v, self.orbit.getOrbit()))
+        pass
+
+    # when speed is applied
+
+    # this will change states to creates the feeling of being blocked
+    def getPesudoMoving(self) -> list[Point]:
+        if self.orbit == None:
+            return self.vertices.copy()
+        pesudoMoveVertices: list[Point] = []
+        for mv in self.movingVertices:
+            mv.move()
+            p = mv.getPoint()
+            pesudoMoveVertices.append(p)
+        return pesudoMoveVertices
+
+    def move(self, pesudoMoveVertices):
+        self.vertices.clear()
+        self.vertices = pesudoMoveVertices
+        self._updateEdges()
+        self._updateInternalPoints()
         pass
 
 
@@ -112,45 +137,3 @@ def validate(vertices: list[Point]):
         if vertices[i].x == vertices[i - 1].x and vertices[i].y == vertices[i - 1].y:
             return False
     return True
-
-
-# def getLinePoints_YProj_intern(pStart: Point, pEnd: Point) -> list[Point]:
-#     vertices = getLinePoints(pStart, pEnd)
-#     slope, intercept = getSlopeAndIntercept(pStart, pEnd)
-#     if slope == 0:
-#         return []
-#     vertices.sort(key=lambda x: x.y)
-#     rangeY = range(vertices[0].y, vertices[-1].y + 1)
-#     verticesResult: list[Point] = []
-#     for y in rangeY:
-#         bufferX: list[int] = []
-#         while len(vertices) > 0:
-#             if vertices[0].y == y:
-#                 bufferX.append(vertices[0].x)
-#                 vertices.pop(0)
-#             else:
-#                 break
-#         if slope > 0:
-#             verticesResult.append(Point(min(bufferX), y))
-#         else:
-#             verticesResult.append(Point(max(bufferX), y))
-#     return verticesResult
-
-
-# def getHorizontalIntersection(pStart: Point, pEnd: Point, y: int):
-#     slope, intercept = getSlopeAndIntercept(pStart, pEnd)
-#     if slope == 0:
-#         if pStart.y == y:
-#             return 2, pStart
-#         return 0, None
-#     if slope == inf:
-#         if min(pStart.y, pEnd.y) <= y and y <= max(pStart.y, pEnd.y):
-#             return 1, Point(pStart.x, y)
-#         return 0, None
-
-#     intersection_x = math.ceil((y - intercept) / slope)
-#     if min(pStart.x, pEnd.x) <= intersection_x and intersection_x <= max(
-#         pStart.x, pEnd.x
-#     ):
-#         return 1, Point(intersection_x, y)
-#     return 0, None

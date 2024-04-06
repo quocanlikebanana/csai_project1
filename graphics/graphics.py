@@ -7,14 +7,14 @@ from component.enviroment import Enviroment
 from component.point import Point
 from graphics.color import BASE_COLOR
 
-MAX_FPS = 1000
+MAX_FPS = 100
 
 
 class Graphics:
-    def __init__(self, env: Enviroment, runinitdraw, runAlgorithmOnce) -> None:
+    def __init__(self, env: Enviroment, runDraw, runAlgorithmOnce) -> None:
         self.env = env
-        self.MAR_X = 0
-        self.MAR_Y = 0
+        self.MAR_X = 30
+        self.MAR_Y = 30
         self.BASE_WINDOW_HEIGHT = 600
         self.BASE_WINDOW_WIDTH = math.ceil(
             (env.ncol / env.nrow) * self.BASE_WINDOW_HEIGHT
@@ -25,7 +25,7 @@ class Graphics:
         self.surface = None
         self.font = None
         self.clock = None
-        self.runinitdraw = runinitdraw
+        self.runDraw = runDraw
         self.runAlgorithmOnce = runAlgorithmOnce
 
     def updateBlockSize(self):
@@ -37,6 +37,12 @@ class Graphics:
         left = self.MAR_X + self.blocksize_x * point.x
         top = self.MAR_Y + self.blocksize_y * point.y
         return left, top
+
+    def onEveryFrameDrawn(self):
+        self.env.updateMovement()
+        if self.runAlgorithmOnce != None:
+            self.runAlgorithmOnce()
+        pass
 
     def runRender(self) -> None:
         pygame.init()
@@ -50,13 +56,12 @@ class Graphics:
         pygame.display.set_caption("Path Finding")
         self.clock = pygame.time.Clock()
         self.updateBlockSize()
-        self.clock.tick(MAX_FPS)
-
+        # self.clock.tick(MAX_FPS)
         # Loop
         while True:
             self.surface.fill(BASE_COLOR["WHITE"])
-            self.runinitdraw()
-            self.runAlgorithmOnce()
+            self.runDraw()
+            self.onEveryFrameDrawn()
             pygame.display.update()
             # Event
             for event in pygame.event.get():

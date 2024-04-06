@@ -92,11 +92,17 @@ class AS_Map:
                     and neighbour.status != NodeStatus.CLOSE
                     and neighbour.status != NodeStatus.START
                 ):
+                    # Kiem tra canh cheo cua PX
                     if i in [0, 1, 2, 3]:
                         neighbour.g = node.g + STRAIGHT_COST
+                        neighbours.append(neighbour)
                     else:
-                        neighbour.g = node.g + CROSS_COST
-                    neighbours.append(neighbour)
+                        if not (
+                            self.nodes[curX + dx][curY].status == NodeStatus.BLOCKED
+                            and self.nodes[curX][curY + dy].status == NodeStatus.BLOCKED
+                        ):
+                            neighbour.g = node.g + CROSS_COST
+                            neighbours.append(neighbour)
         return neighbours
 
 
@@ -117,6 +123,8 @@ class AStar:
         if self.searching == False:
             return False
         else:
+            if self.open.isEmpty():
+                raise ValueError("astar not found")
             currentNode = self.open.delete()
             self.close.insert(currentNode)
             if currentNode != self.startNode:

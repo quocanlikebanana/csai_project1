@@ -1,4 +1,5 @@
 from math import inf
+import math
 
 
 class Point:
@@ -19,6 +20,12 @@ class Point:
     def relative(self, x: int, y: int):
         return Point(self.x + x, self.y + y)
 
+    def getAbsDistance(self, dest) -> float:
+        return math.sqrt((dest.x - self.x) ** 2 + (dest.y - self.y) ** 2)
+
+    def getMattathanDistance(self, dest) -> float:
+        return abs((dest.x - self.x) + (dest.y - self.y))
+
 
 class Vector:
     def __init__(self, start: Point, end: Point):
@@ -27,7 +34,7 @@ class Vector:
         self.points: list[Point] = []
         self.slope: int = None
         self.intercept: int = None
-        self._init()
+        self._update()
         self.draftStart = start
         self.draftPoints = self.points.copy()
 
@@ -66,7 +73,7 @@ class Vector:
         self.draftPoints.clear()
 
     # Init
-    def _init(self):
+    def _update(self):
         if self.end.y == self.start.y:
             self.slope = 0
         elif self.end.x == self.start.x:

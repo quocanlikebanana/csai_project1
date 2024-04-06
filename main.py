@@ -1,31 +1,29 @@
 from algorithm.astar import *
 from component.enviroment import Enviroment
+from component.moving import ConstantOrbit, LinearOrbit, RatioOrbit
 from component.point import Point
 from component.polygon import Polygon
-from graphics.drawer import EnvDrawer
+from graphics.drawer import Drawer
 
 
-def test1():
+def test2():
     pl = [
-        Polygon([Point(2, 2), Point(4, 1), Point(7, 5)]),
-        Polygon([Point(19, 5), Point(34, 15), Point(42, 52), Point(12, 42)]),
-        Polygon([Point(9, 1), Point(18, 5), Point(5, 19)]),
-        Polygon([Point(24, 16), Point(24, 19), Point(27, 19), Point(27, 16)]),
         Polygon(
-            [
-                Point(16, 2),
-                Point(23, 2),
-                Point(23, 10),
-                Point(20, 10),
-                Point(20, 5),
-                Point(16, 5),
-            ]
+            [Point(2, 2), Point(4, 2), Point(4, 4), Point(2, 4)],
+            ConstantOrbit([Point(0, 0), Point(0, 4), Point(2, 4)], 50),
+        ),
+        Polygon(
+            [Point(12, 2), Point(14, 2), Point(14, 4), Point(12, 4)],
+            LinearOrbit([Point(0, 0), Point(0, 4), Point(2, 4)], 15),
+        ),
+        Polygon(
+            [Point(22, 2), Point(24, 2), Point(24, 4), Point(22, 4)],
+            RatioOrbit([Point(0, 0), Point(0, 4), Point(2, 4)], 0.5),
         ),
     ]
-    env = Enviroment(45, 55, Point(1, 1), Point(43, 53), [], pl)
-    astar = AStar(AS_Map(env), EuclideanHeuristic)
-    md = EnvDrawer(env, astar.searchOnce)
-    md.runInitDraw()
+    env = Enviroment(30, 30, Point(1, 1), Point(28, 28), [], pl)
+    md = Drawer(env)
+    md.runDraw()
 
 
-test1()  # Co van de voi viec di cheo
+test2()

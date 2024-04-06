@@ -24,7 +24,7 @@ def genColor(red: int, green: int, blue: int):
 
 
 def isCloseColor(color1: tuple[int, int, int], color2: tuple[int, int, int]) -> bool:
-    DIFF = 24 * 3
+    DIFF = 24 * 2
     if (
         abs(color1[0] - color2[0])
         + abs(color1[1] - color2[1])
