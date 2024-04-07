@@ -12,7 +12,6 @@ class Polygon:
         self.edges: list[Vector] = []
         self.internalPoints: list[Point] = []
         self.movingVertices: list[MovingPoint] = []
-        self.currentVelocity = None
         self.orbit = orbit
         self._updateTranslates()
         self._updateEdges()

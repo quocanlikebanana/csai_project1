@@ -31,6 +31,11 @@ class Enviroment:
         self._validateEnv()
         ## ====
         ## After this, the enviroment is valid
+        self.moving = False
+        for p in self.polygons:
+            if self.polygons[p].orbit != None:
+                self.moving = True
+                break
         self.blockPoints: list[Point] = []
         self._updateBlockPoints()
         self.map = [
@@ -74,15 +79,16 @@ class Enviroment:
         self._updateBlockPoints()
 
     def updateMovement(self):
-        for id in self.polygons:
-            pmv = self.polygons[id].getPesudoMoving()
-            if self.validatePolygonVertices(pmv, self.polygons[id]):
-                for p in self.polygons[id].points:
-                    self.map[p.x][p.y].setState(CELL_STATE.NONE)
-                self.polygons[id].move(pmv)
-                for p in self.polygons[id].points:
-                    self.map[p.x][p.y].setState(CELL_STATE.BLOCKED, id)
-        self._updatePolyPoints()
+        if self.moving == True:
+            for id in self.polygons:
+                pmv = self.polygons[id].getPesudoMoving()
+                if self.validatePolygonVertices(pmv, self.polygons[id]):
+                    for p in self.polygons[id].points:
+                        self.map[p.x][p.y].setState(CELL_STATE.NONE)
+                    self.polygons[id].move(pmv)
+                    for p in self.polygons[id].points:
+                        self.map[p.x][p.y].setState(CELL_STATE.BLOCKED, id)
+            self._updatePolyPoints()
 
     def _checkInRange(self, point: Point) -> bool:
         # Border is 1 pixel
@@ -102,6 +108,7 @@ class Enviroment:
 
     # vertices might not from polygon, it could be pesudo ones
     def validatePolygonVertices(self, vertices: list[Point], polygon: Polygon) -> bool:
+        return True
         testEdgePoints: list[Point] = []
         vLen = len(vertices)
         for i in range(0, vLen):

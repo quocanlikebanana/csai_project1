@@ -5,13 +5,15 @@ from component.enviroment import Enviroment
 
 
 class Drawer:
-    def __init__(self, env: Enviroment, runAlgorithmOnce=None) -> None:
+    def __init__(self, env: Enviroment) -> None:
         self.env = env
         self.polycolors = genRandomDistinctColor(len(self.env.polygons))
-        self.graphics = Graphics(env, self.runDraw, runAlgorithmOnce)
-        self.graphics.runRender()
+        self.graphics = Graphics(env, self.drawAll)
 
-    def runDraw(self):
+    def run(self):
+        self.graphics.run()
+
+    def drawAll(self):
         # Order decides
         self.drawMapBorder()
         self.drawPolygons()

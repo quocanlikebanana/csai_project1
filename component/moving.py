@@ -25,6 +25,7 @@ class Translate:
         return self.progress <= 0
 
 
+# The most stable one currently
 class LinearOrbit:
     def __init__(self, points: list[Point], constTime: float) -> None:
         self.points = points
