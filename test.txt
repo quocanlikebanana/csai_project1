@@ -1,0 +1,189 @@
+Sun Apr  7 16:04:41 2024    test_stats
+
+         8585325 function calls (8583218 primitive calls) in 26.374 seconds
+
+   Ordered by: internal time
+   List reduced from 267 to 53 due to restriction <0.2>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    19902   14.016    0.001   19.637    0.001 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:20(points)
+  5881912    5.810    0.000    5.810    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:12(__eq__)
+      450    1.539    0.003   28.232    0.063 c:\Python312\Lib\threading.py:323(wait)
+  1133254    0.888    0.000    1.181    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:19(__hash__)
+   1891/3    0.873    0.000    0.000    0.000 {method 'acquire' of '_thread.lock' objects}
+      190    0.858    0.005    7.615    0.040 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:110(validatePolygonVertices)
+  446/237    0.494    0.001   31.908    0.135 c:\Python312\Lib\queue.py:154(get)
+      171    0.308    0.002   38.907    0.228 c:\Python312\Lib\threading.py:637(wait)
+  1133254    0.293    0.000    0.293    0.000 {built-in method builtins.hash}
+       37    0.230    0.006    0.344    0.009 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:74(renderGrid)
+       38    0.147    0.004    0.520    0.014 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:62(_updatePolyPoints)
+    17140    0.091    0.000    0.160    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:83(renderFilledPixel)
+    50440    0.083    0.000    0.083    0.000 {built-in method pygame.draw.rect}
+      190    0.076    0.000    0.148    0.001 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:33(_updateInternalPoints)
+       40    0.072    0.002    0.101    0.003 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:66(_updateBlockPoints)
+        1    0.072    0.072    0.075    0.075 {built-in method pygame.base.init}
+    54396    0.068    0.000    0.068    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:6(__init__)
+     1900    0.058    0.000    0.082    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:78(_update)
+    50514    0.047    0.000    0.047    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:36(getScreenPosition)
+       37    0.041    0.001    0.346    0.009 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:45(drawPolygons)
+   101029    0.030    0.000    0.030    0.000 {built-in method math.ceil}
+       37    0.025    0.001    0.025    0.001 {built-in method pygame.event.get}
+       37    0.015    0.000    0.055    0.001 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:28(drawMapBorder)
+     4104    0.015    0.000    0.017    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:63(X_intersect_Y)
+    32479    0.014    0.000    0.014    0.000 {method 'append' of 'list' objects}
+       37    0.013    0.000    3.234    0.087 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:81(updateMovement)
+     1900    0.013    0.000    0.096    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:33(__init__)
+    22409    0.012    0.000    0.012    0.000 D:\programin\codes\visual code\python_ai\project1\component\map.py:24(setState)
+       37    0.010    0.000    0.010    0.000 {built-in method pygame.display.update}
+      2/1    0.008    0.004   26.354   26.354 D:\programin\codes\visual code\python_ai\project1\main.py:20(test)
+    19889    0.008    0.000    0.008    0.000 {built-in method builtins.len}
+     5086    0.007    0.000    0.007    0.000 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:93(_checkInRange)
+        1    0.007    0.007    0.007    0.007 {built-in method pygame.display.set_mode}
+     3078    0.007    0.000    0.008    0.000 {method 'sort' of 'list' objects}
+       86    0.006    0.000    0.014    0.000 c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.4.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd.py:1681(process_internal_commands)
+       37    0.006    0.000    0.006    0.000 {method 'fill' of 'pygame.surface.Surface' objects}
+      190    0.005    0.000    0.046    0.000 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:26(_updateEdges)
+     5172    0.005    0.000    0.005    0.000 {method 'values' of 'dict' objects}
+       37    0.004    0.000    0.016    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:53(drawOpened)
+     8124    0.004    0.000    0.004    0.000 {built-in method builtins.round}
+      296    0.004    0.000    0.011    0.000 D:\programin\codes\visual code\python_ai\project1\algorithm\bfs.py:46(path_extend)
+      454    0.004    0.000    0.004    0.000 {built-in method _thread.allocate_lock}
+      185    0.004    0.000    0.193    0.001 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:120(move)
+     1218    0.004    0.000    0.004    0.000 {built-in method builtins.max}
+        1    0.003    0.003    0.274    0.274 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:8(__init__)
+        1    0.003    0.003    0.263    0.263 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:131(_validateEnv)
+       37    0.003    0.000    0.011    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:57(drawClosed)
+     1216    0.003    0.000    0.003    0.000 {built-in method builtins.min}
+      172    0.002    0.000    0.003    0.000 c:\Python312\Lib\threading.py:1533(enumerate)
+       74    0.002    0.000    0.002    0.000 {method 'render' of 'pygame.font.Font' objects}
+       37    0.002    0.000    0.015    0.000 D:\programin\codes\visual code\python_ai\project1\algorithm\bfs.py:14(searchOnce)
+        1    0.002    0.002    0.003    0.003 D:\programin\codes\visual code\python_ai\project1\algorithm\astar.py:53(__init__)
+      758    0.002    0.000    0.003    0.000 c:\Python312\Lib\threading.py:302(__exit__)
+
+
+Sun Apr  7 16:04:41 2024    test_stats
+
+         8585325 function calls (8583218 primitive calls) in 26.374 seconds
+
+   Ordered by: internal time
+   List reduced from 267 to 53 due to restriction <0.2>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    19902   14.016    0.001   19.637    0.001 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:20(points)
+  5881912    5.810    0.000    5.810    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:12(__eq__)
+      450    1.539    0.003   28.232    0.063 c:\Python312\Lib\threading.py:323(wait)
+  1133254    0.888    0.000    1.181    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:19(__hash__)
+   1891/3    0.873    0.000    0.000    0.000 {method 'acquire' of '_thread.lock' objects}
+      190    0.858    0.005    7.615    0.040 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:110(validatePolygonVertices)
+  446/237    0.494    0.001   31.908    0.135 c:\Python312\Lib\queue.py:154(get)
+      171    0.308    0.002   38.907    0.228 c:\Python312\Lib\threading.py:637(wait)
+  1133254    0.293    0.000    0.293    0.000 {built-in method builtins.hash}
+       37    0.230    0.006    0.344    0.009 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:74(renderGrid)
+       38    0.147    0.004    0.520    0.014 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:62(_updatePolyPoints)
+    17140    0.091    0.000    0.160    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:83(renderFilledPixel)
+    50440    0.083    0.000    0.083    0.000 {built-in method pygame.draw.rect}
+      190    0.076    0.000    0.148    0.001 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:33(_updateInternalPoints)
+       40    0.072    0.002    0.101    0.003 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:66(_updateBlockPoints)
+        1    0.072    0.072    0.075    0.075 {built-in method pygame.base.init}
+    54396    0.068    0.000    0.068    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:6(__init__)
+     1900    0.058    0.000    0.082    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:78(_update)
+    50514    0.047    0.000    0.047    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:36(getScreenPosition)
+       37    0.041    0.001    0.346    0.009 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:45(drawPolygons)
+   101029    0.030    0.000    0.030    0.000 {built-in method math.ceil}
+       37    0.025    0.001    0.025    0.001 {built-in method pygame.event.get}
+       37    0.015    0.000    0.055    0.001 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:28(drawMapBorder)
+     4104    0.015    0.000    0.017    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:63(X_intersect_Y)
+    32479    0.014    0.000    0.014    0.000 {method 'append' of 'list' objects}
+       37    0.013    0.000    3.234    0.087 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:81(updateMovement)
+     1900    0.013    0.000    0.096    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:33(__init__)
+    22409    0.012    0.000    0.012    0.000 D:\programin\codes\visual code\python_ai\project1\component\map.py:24(setState)
+       37    0.010    0.000    0.010    0.000 {built-in method pygame.display.update}
+      2/1    0.008    0.004   26.354   26.354 D:\programin\codes\visual code\python_ai\project1\main.py:20(test)
+    19889    0.008    0.000    0.008    0.000 {built-in method builtins.len}
+     5086    0.007    0.000    0.007    0.000 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:93(_checkInRange)
+        1    0.007    0.007    0.007    0.007 {built-in method pygame.display.set_mode}
+     3078    0.007    0.000    0.008    0.000 {method 'sort' of 'list' objects}
+       86    0.006    0.000    0.014    0.000 c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.4.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd.py:1681(process_internal_commands)
+       37    0.006    0.000    0.006    0.000 {method 'fill' of 'pygame.surface.Surface' objects}
+      190    0.005    0.000    0.046    0.000 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:26(_updateEdges)
+     5172    0.005    0.000    0.005    0.000 {method 'values' of 'dict' objects}
+       37    0.004    0.000    0.016    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:53(drawOpened)
+     8124    0.004    0.000    0.004    0.000 {built-in method builtins.round}
+      296    0.004    0.000    0.011    0.000 D:\programin\codes\visual code\python_ai\project1\algorithm\bfs.py:46(path_extend)
+      454    0.004    0.000    0.004    0.000 {built-in method _thread.allocate_lock}
+      185    0.004    0.000    0.193    0.001 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:120(move)
+     1218    0.004    0.000    0.004    0.000 {built-in method builtins.max}
+        1    0.003    0.003    0.274    0.274 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:8(__init__)
+        1    0.003    0.003    0.263    0.263 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:131(_validateEnv)
+       37    0.003    0.000    0.011    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:57(drawClosed)
+     1216    0.003    0.000    0.003    0.000 {built-in method builtins.min}
+      172    0.002    0.000    0.003    0.000 c:\Python312\Lib\threading.py:1533(enumerate)
+       74    0.002    0.000    0.002    0.000 {method 'render' of 'pygame.font.Font' objects}
+       37    0.002    0.000    0.015    0.000 D:\programin\codes\visual code\python_ai\project1\algorithm\bfs.py:14(searchOnce)
+        1    0.002    0.002    0.003    0.003 D:\programin\codes\visual code\python_ai\project1\algorithm\astar.py:53(__init__)
+      758    0.002    0.000    0.003    0.000 c:\Python312\Lib\threading.py:302(__exit__)
+
+
+Sun Apr  7 16:04:41 2024    test_stats
+
+         8585325 function calls (8583218 primitive calls) in 26.374 seconds
+
+   Ordered by: internal time
+   List reduced from 267 to 53 due to restriction <0.2>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    19902   14.016    0.001   19.637    0.001 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:20(points)
+  5881912    5.810    0.000    5.810    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:12(__eq__)
+      450    1.539    0.003   28.232    0.063 c:\Python312\Lib\threading.py:323(wait)
+  1133254    0.888    0.000    1.181    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:19(__hash__)
+   1891/3    0.873    0.000    0.000    0.000 {method 'acquire' of '_thread.lock' objects}
+      190    0.858    0.005    7.615    0.040 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:110(validatePolygonVertices)
+  446/237    0.494    0.001   31.908    0.135 c:\Python312\Lib\queue.py:154(get)
+      171    0.308    0.002   38.907    0.228 c:\Python312\Lib\threading.py:637(wait)
+  1133254    0.293    0.000    0.293    0.000 {built-in method builtins.hash}
+       37    0.230    0.006    0.344    0.009 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:74(renderGrid)
+       38    0.147    0.004    0.520    0.014 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:62(_updatePolyPoints)
+    17140    0.091    0.000    0.160    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:83(renderFilledPixel)
+    50440    0.083    0.000    0.083    0.000 {built-in method pygame.draw.rect}
+      190    0.076    0.000    0.148    0.001 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:33(_updateInternalPoints)
+       40    0.072    0.002    0.101    0.003 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:66(_updateBlockPoints)
+        1    0.072    0.072    0.075    0.075 {built-in method pygame.base.init}
+    54396    0.068    0.000    0.068    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:6(__init__)
+     1900    0.058    0.000    0.082    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:78(_update)
+    50514    0.047    0.000    0.047    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:36(getScreenPosition)
+       37    0.041    0.001    0.346    0.009 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:45(drawPolygons)
+   101029    0.030    0.000    0.030    0.000 {built-in method math.ceil}
+       37    0.025    0.001    0.025    0.001 {built-in method pygame.event.get}
+       37    0.015    0.000    0.055    0.001 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:28(drawMapBorder)
+     4104    0.015    0.000    0.017    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:63(X_intersect_Y)
+    32479    0.014    0.000    0.014    0.000 {method 'append' of 'list' objects}
+       37    0.013    0.000    3.234    0.087 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:81(updateMovement)
+     1900    0.013    0.000    0.096    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:33(__init__)
+    22409    0.012    0.000    0.012    0.000 D:\programin\codes\visual code\python_ai\project1\component\map.py:24(setState)
+       37    0.010    0.000    0.010    0.000 {built-in method pygame.display.update}
+      2/1    0.008    0.004   26.354   26.354 D:\programin\codes\visual code\python_ai\project1\main.py:20(test)
+    19889    0.008    0.000    0.008    0.000 {built-in method builtins.len}
+     5086    0.007    0.000    0.007    0.000 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:93(_checkInRange)
+        1    0.007    0.007    0.007    0.007 {built-in method pygame.display.set_mode}
+     3078    0.007    0.000    0.008    0.000 {method 'sort' of 'list' objects}
+       86    0.006    0.000    0.014    0.000 c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.4.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd.py:1681(process_internal_commands)
+       37    0.006    0.000    0.006    0.000 {method 'fill' of 'pygame.surface.Surface' objects}
+      190    0.005    0.000    0.046    0.000 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:26(_updateEdges)
+     5172    0.005    0.000    0.005    0.000 {method 'values' of 'dict' objects}
+       37    0.004    0.000    0.016    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:53(drawOpened)
+     8124    0.004    0.000    0.004    0.000 {built-in method builtins.round}
+      296    0.004    0.000    0.011    0.000 D:\programin\codes\visual code\python_ai\project1\algorithm\bfs.py:46(path_extend)
+      454    0.004    0.000    0.004    0.000 {built-in method _thread.allocate_lock}
+      185    0.004    0.000    0.193    0.001 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:120(move)
+     1218    0.004    0.000    0.004    0.000 {built-in method builtins.max}
+        1    0.003    0.003    0.274    0.274 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:8(__init__)
+        1    0.003    0.003    0.263    0.263 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:131(_validateEnv)
+       37    0.003    0.000    0.011    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:57(drawClosed)
+     1216    0.003    0.000    0.003    0.000 {built-in method builtins.min}
+      172    0.002    0.000    0.003    0.000 c:\Python312\Lib\threading.py:1533(enumerate)
+       74    0.002    0.000    0.002    0.000 {method 'render' of 'pygame.font.Font' objects}
+       37    0.002    0.000    0.015    0.000 D:\programin\codes\visual code\python_ai\project1\algorithm\bfs.py:14(searchOnce)
+        1    0.002    0.002    0.003    0.003 D:\programin\codes\visual code\python_ai\project1\algorithm\astar.py:53(__init__)
+      758    0.002    0.000    0.003    0.000 c:\Python312\Lib\threading.py:302(__exit__)
+
+

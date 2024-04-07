@@ -11,7 +11,7 @@ MAX_FPS = 100
 
 
 class Graphics:
-    def __init__(self, env: Enviroment, runDraw, runAlgorithmOnce) -> None:
+    def __init__(self, env: Enviroment, runDraw) -> None:
         self.env = env
         self.MAR_X = 30
         self.MAR_Y = 30
@@ -26,7 +26,7 @@ class Graphics:
         self.font = None
         self.clock = None
         self.runDraw = runDraw
-        self.runAlgorithmOnce = runAlgorithmOnce
+        self.runAlgorithmOnce = None
 
     def updateBlockSize(self):
         windowWidth, windowHeight = pygame.display.get_surface().get_size()
@@ -44,7 +44,7 @@ class Graphics:
             self.runAlgorithmOnce()
         pass
 
-    def runRender(self) -> None:
+    def run(self) -> None:
         pygame.init()
         self.surface = pygame.display.set_mode(
             (self.BASE_WINDOW_WIDTH, self.BASE_WINDOW_HEIGHT),
@@ -90,9 +90,10 @@ class Graphics:
     def renderSymbolPixel(self, point: Point, symbol: str):
         left, top = self.getScreenPosition(point)
         textSurface = self.font.render(symbol, True, BASE_COLOR["BLACK"])
+        widthRatio = 0.55
         stretchedTextSurface = pygame.transform.smoothscale(
             textSurface,
-            (math.ceil(self.blocksize_x * 0.55), math.ceil(self.blocksize_y)),
+            (math.ceil(self.blocksize_x * widthRatio), math.ceil(self.blocksize_y)),
         )
         textRect = stretchedTextSurface.get_rect(
             center=(left + self.blocksize_x / 2, top + self.blocksize_y / 2)
