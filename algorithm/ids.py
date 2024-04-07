@@ -8,7 +8,9 @@
 # Path cost: 1 cost for 4 horizontal and vertical, 1.5 cost for 4 cross.
 
 
+from algorithm.algorithm import Algorithm
 from component.enviroment import Enviroment
+from component.map import DIRECTION
 from component.point import Point
 from enum import Enum
 
@@ -35,72 +37,42 @@ class IDS_Node:
             return True
         return False
 
-    def action(self, method: METHODS):
-        if method == METHODS.LEFT:
-            return IDS_Node(self, self.state.relative(-1, 0), 1)
-        elif method == METHODS.LEFT_UP:
-            return IDS_Node(self, self.state.relative(-1, -1), 1.5)
-        elif method == METHODS.UP:
-            return IDS_Node(self, self.state.relative(0, -1), 1)
-        elif method == METHODS.RIGHT_UP:
-            return IDS_Node(self, self.state.relative(1, -1), 1.5)
-        elif method == METHODS.RIGHT:
-            return IDS_Node(self, self.state.relative(1, 0), 1)
-        elif method == METHODS.RIGHT_DOWN:
-            return IDS_Node(self, self.state.relative(1, 1), 1.5)
-        elif method == METHODS.DOWN:
-            return IDS_Node(self, self.state.relative(0, 1), 1)
-        elif method == METHODS.LEFT_DOWN:
-            return IDS_Node(self, self.state.relative(-1, 1), 1.5)
+    def getChild(self, dir: DIRECTION):
+        cost = 1
+        if DIRECTION.isCrossDir(dir):
+            cost = 1.5
+        return IDS_Node(self, self.state.relative(dir.value.x, dir.value.y), cost)
 
 
-class IDS:
-    def __init__(self, map: Enviroment) -> None:
-        self.map = map
-        self.goal = map.endPoint
-        self.initNode = IDS_Node(None, map.startPoint, 0)
-        self.curNode = self.initNode
+class IDS(Algorithm):
+    def __init__(self, env: Enviroment) -> None:
+        super().__init__(env)
+        self.env = env
         self.MAX_LIM = 100000
         self.done = False
+        self.cost = None
+        self.found = False
+        self.frontier: list[IDS_Node] = [IDS_Node(None, env.startPoint, 0)]
 
-    def constraint(self):
-        return self.map.validatePosition(self.curNode)
+    def isDone(self):
+        return self.cost != None
 
-    def getPointsPath(self):
-        path: list[Point] = []
-        tempNode = self.curNode
-        while True:
-            path.insert(0, self.curNode.state)
-            if tempNode.parent == None:
-                break
-            tempNode = tempNode.parent
-        return path
-
-    def getCost(self):
-        pass
-
-    def search(self):
-        if self.done == True:
-            return None
-        lim = 1
-        curLim = 1
-        frontier: list[IDS_Node] = []
-        explored: list[IDS_Node] = []
-        child: IDS_Node
-        while lim <= self.MAX_LIM:
-            curLim = lim
-            explored = []
-            frontier.insert(0, self.initNode)
-            while curLim > 0 and len(frontier) > 0:
-                self.curNode = frontier.pop(0)
-                explored.append(self.curNode)
-                if self.curNode.isSameState(self.goal):
-                    self.done = True
-                    return self.curNode
-                for method in METHODS:
-                    child = self.curNode.action(method)
-                    if not child in explored:
-                        frontier.insert(0, child)
-                curLim -= 1
-            lim += 1
-        return None
+    def searchOnce(self):
+        if self.isDone() == True:
+            return
+        if len(self.frontier) == 0:
+            raise ValueError("ids not found")
+        curNode = self.frontier.pop(0)
+        self.env.appendClosePoint(curNode.state)
+        if curNode.state == self.env.endPoint:
+            self.cost = 0
+            while curNode.parent != None:
+                self.env.appendDonePoint(curNode.state)
+                self.cost += curNode.cost
+                curNode = curNode.parent
+        else:
+            for dir in DIRECTION:
+                if self.env.validateMove(curNode.state, dir) == True:
+                    child = curNode.getChild(dir)
+                    self.frontier.insert(-1, child)
+                    self.env.appendOpenPoint(child.state)
