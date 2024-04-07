@@ -13,6 +13,21 @@ class CELL_STATE(Enum):
     DONE = 8
 
 
+class DIRECTION(Enum):
+    LEFT = Point(-1, 0)
+    RIGHT = Point(1, 0)
+    DOWN = Point(0, 1)
+    UP = Point(0, -1)
+    RIGHTDOWN = Point(1, 1)
+    LEFTTOP = Point(-1, -1)
+    RIGHTTOP = Point(1, -1)
+    LEFTDOWN = Point(-1, 1)
+
+    @staticmethod
+    def isCrossDir(dir):
+        return dir.value.x != 0 and dir.value.y != 0
+
+
 class Cell:
     def __init__(self, point: Point, state: CELL_STATE, extraInfo=None) -> None:
         self.x = point.x

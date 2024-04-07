@@ -1,7 +1,9 @@
 from enum import Enum
-from component.map import CELL_STATE, Cell
+from component.map import CELL_STATE, DIRECTION, Cell
 from component.point import Point, Vector
 from component.polygon import Polygon
+
+CHECK_POLYGON_MOVE = False
 
 
 class Enviroment:
@@ -79,10 +81,15 @@ class Enviroment:
         self._updateBlockPoints()
 
     def updateMovement(self):
+        # Still slower even when no validating
         if self.moving == True:
             for id in self.polygons:
                 pmv = self.polygons[id].getPesudoMoving()
-                if self.validatePolygonVertices(pmv, self.polygons[id]):
+                ## New way of validating:
+                # check if point on map is in other polygon instead
+                if CHECK_POLYGON_MOVE == False or self.validatePolygonVertices(
+                    pmv, self.polygons[id]
+                ):
                     for p in self.polygons[id].points:
                         self.map[p.x][p.y].setState(CELL_STATE.NONE)
                     self.polygons[id].move(pmv)
@@ -108,7 +115,6 @@ class Enviroment:
 
     # vertices might not from polygon, it could be pesudo ones
     def validatePolygonVertices(self, vertices: list[Point], polygon: Polygon) -> bool:
-        return True
         testEdgePoints: list[Point] = []
         vLen = len(vertices)
         for i in range(0, vLen):
@@ -130,19 +136,62 @@ class Enviroment:
         return True
 
     def _validateEnv(self):
-        if not self.validatePosition(self.startPoint) or not self.validatePosition(
-            self.endPoint
-        ):
+        if not self.validatePositionByList(
+            self.startPoint
+        ) or not self.validatePositionByList(self.endPoint):
             raise ValueError("invalid startpont / endpoint")
         for poly in self.pickupPoints:
-            if not self.validatePosition(poly):
+            if not self.validatePositionByList(poly):
                 raise ValueError("invalid pickup points")
         for poly in self.polygons.values():
             if self.validatePolygonVertices(poly.vertices, poly) == False:
                 raise ValueError("invalid polygons")
         return True
 
-    def validatePosition(self, pos: Point):
+    def validatePositionByList(self, pos: Point):
         if self._checkInRange(pos) and self._checkNotOnPolygon(pos):
             return True
         return False
+
+    def appendClosePoint(self, p: Point):
+        self.closedPoints.append(p)
+        self.map[p.x][p.y].setState(CELL_STATE.CLOSE)
+        pass
+
+    def appendOpenPoint(self, p: Point):
+        self.openedPoints.append(p)
+        self.map[p.x][p.y].setState(CELL_STATE.OPEN)
+        pass
+
+    def appendDonePoint(self, p: Point):
+        self.donePoints.append(p)
+        self.map[p.x][p.y].setState(CELL_STATE.DONE)
+        pass
+
+    def validatePositionByMap(self, pos: Point):
+        if (
+            self._checkInRange(pos)
+            and self.map[pos.x][pos.y].getState()[0] != CELL_STATE.BLOCKED
+        ):
+            return True
+        return False
+
+    def validateMove(self, pos: Point, dir: DIRECTION):
+        dest = pos.relative(dir.value.x, dir.value.y)
+        if (
+            self.validatePositionByMap(dest) == False
+            or self.map[dest.x][dest.y].getState()[0] == CELL_STATE.CLOSE
+            or self.map[dest.x][dest.y].getState()[0] == CELL_STATE.OPEN
+        ):
+            return False
+        if DIRECTION.isCrossDir(dir) == True:
+            hor = self.map[pos.x + dir.value.x][pos.y].getState()
+            ver = self.map[pos.x][pos.y + dir.value.y].getState()
+            if (
+                hor[0] == CELL_STATE.BLOCKED
+                and ver[0] == CELL_STATE.BLOCKED
+                and hor[1] == ver[1]
+            ):
+                return False
+
+        return True
