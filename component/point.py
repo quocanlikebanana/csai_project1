@@ -15,6 +15,10 @@ class Point:
                 return True
             return False
         return False
+    
+    #for dijkstra
+    def __lt__(self, other):
+        return self
 
     def __hash__(self):
         return hash(self.x + self.y)

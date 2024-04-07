@@ -5,6 +5,7 @@ from component.moving import ConstantOrbit, LinearOrbit, RatioOrbit
 from component.point import Point
 from component.polygon import Polygon
 from graphics.drawer import Drawer
+from algorithm.dijkstra import *
 
 def test2():
     pl = [
@@ -30,7 +31,10 @@ def test2():
     #BFS
     bfs = BFS(env)
 
-    md = Drawer(env,bfs.searchOnce)
+    #Dijkstra
+    dijkstra = Dijkstra(env)
+
+    md = Drawer(env,dijkstra.searchOnce)
     md.runDraw()
 
 
