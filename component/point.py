@@ -6,6 +6,8 @@ class Point:
     def __init__(self, x: int, y: int):
         self.x = int(x) or 0
         self.y = int(y) or 0
+    def __str__(self) -> str:
+        return f"({self.x}, {self.y}) "
 
     def __eq__(self, __value: object) -> bool:
         if type(__value) == Point:
