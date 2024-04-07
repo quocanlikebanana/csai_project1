@@ -31,7 +31,7 @@ class Dijkstra:
                     adjacent_point: Point = current_point.relative(i, j)
 
                     if (
-                        self.env.validatePosition(adjacent_point)
+                        self.env.validatePositionByList(adjacent_point)
                         and self.env.map[adjacent_point.x][adjacent_point.y].getState()[
                             0
                         ]

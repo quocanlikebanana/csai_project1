@@ -1,5 +1,6 @@
 from algorithm.astar import *
 from algorithm.bfs import *
+from algorithm.dijkstra import Dijkstra
 from algorithm.ids import IDS
 from component.enviroment import Enviroment
 from component.moving import ConstantOrbit, LinearOrbit, RatioOrbit
@@ -35,6 +36,7 @@ def test():
     bfs = BFS(env)
     astar = AStar(AS_Map(env), EuclideanHeuristic)
     ids = IDS(env)
+    dij = Dijkstra(env)
     main = Main(env, ids.searchOnce)
     main.run()
 
