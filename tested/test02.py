@@ -3,7 +3,7 @@ from algorithm.bfs import *
 from algorithm.dijkstra import Dijkstra
 from algorithm.ids import IDS
 from component.enviroment import Enviroment
-from component.moving import ConstantOrbit, LinearOrbit, RatioOrbit, SimpleOrbit
+from component.moving import ConstantOrbit, LinearOrbit, RatioOrbit
 from component.point import Point
 from component.polygon import Polygon
 from graphics.drawer import Drawer
@@ -27,7 +27,6 @@ def test():
         Polygon([Point(4, 10), Point(10, 20), Point(26, 20), Point(26, 10)]),
         Polygon(
             [Point(2, 20), Point(8, 20), Point(8, 26), Point(2, 26)],
-            SimpleOrbit([(1, 1, 1), (-1, -1, 1)]),
             # LinearOrbit([Point(0, 0), Point(2, 2)], 10),
         ),
     ]
@@ -54,3 +53,10 @@ if __name__ == "__main__":
 
     with open("test.txt", "w+") as f:
         f.write(s.getvalue())
+
+    # profiler = cProfile.Profile()
+    # profiler.enable()
+    # test()
+    # profiler.disable()
+    # stats = pstats.Stats(profiler).sort_stats("ncalls")
+    # stats.print_stats()

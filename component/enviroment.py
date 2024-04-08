@@ -186,7 +186,7 @@ class Enviroment:
             return True
         return False
 
-    def validateMove(self, pos: Point, dir: DIRECTION):
+    def validatePathMove(self, pos: Point, dir: DIRECTION):
         dest = pos.relative(dir.value.x, dir.value.y)
         if (
             self.validatePositionByMap(dest) == False

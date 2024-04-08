@@ -1,29 +1,8 @@
-## OLD FILE, NOT USED
-
-# State: any position on grid (x,y; x, y is N, x > 0, y > 0) that stays in the gird and not on the polygons
-# Initial state: start position.
-# Action: Move to 8 adjacent tiles.
-# Transition model: New position based on the direction chosen to move.
-# Goal test: state position is the end position.
-# Path cost: 1 cost for 4 horizontal and vertical, 1.5 cost for 4 cross.
-
-
 from algorithm.algorithm import Algorithm
 from component.enviroment import Enviroment
 from component.map import DIRECTION
 from component.point import Point
 from enum import Enum
-
-
-class METHODS(Enum):
-    LEFT = 1
-    LEFT_UP = 2
-    UP = 3
-    RIGHT_UP = 4
-    RIGHT = 5
-    RIGHT_DOWN = 6
-    DOWN = 7
-    LEFT_DOWN = 8
 
 
 class IDS_Node:
@@ -56,6 +35,7 @@ class IDS(Algorithm):
         self.done = False
         self.cost = None
         self.found = False
+        self.step = 10
         self.frontier: list[IDS_Node] = [IDS_Node(None, self.env.startPoint, 0, 0)]
         self.env.appendClosePoint(self.env.startPoint)
 
@@ -64,7 +44,7 @@ class IDS(Algorithm):
 
     def resetDFS(self):
         self.env.clearFinding()
-        self.curLim += 1
+        self.curLim += self.step
         self.frontier: list[IDS_Node] = [IDS_Node(None, self.env.startPoint, 0, 0)]
         self.env.appendClosePoint(self.env.startPoint)
 
@@ -85,7 +65,7 @@ class IDS(Algorithm):
         else:
             if curNode.depth != self.curLim:
                 for dir in DIRECTION:
-                    if self.env.validateMove(curNode.state, dir) == True:
+                    if self.env.validatePathMove(curNode.state, dir) == True:
                         child = curNode.getChild(dir)
                         # self.frontier.append(child)  # bfs
                         self.frontier.insert(0, child)  # dfs
