@@ -153,19 +153,29 @@ class Enviroment:
             return True
         return False
 
+    def clearFinding(self):
+        allFindingPoints = self.closedPoints + self.openedPoints
+        for p in allFindingPoints:
+            self.map[p.x][p.y].setState(CELL_STATE.NONE)
+        self.closedPoints.clear()
+        self.openedPoints.clear()
+
     def appendClosePoint(self, p: Point):
-        self.closedPoints.append(p)
-        self.map[p.x][p.y].setState(CELL_STATE.CLOSE)
+        if self.map[p.x][p.y].getState()[0] != CELL_STATE.CLOSE:
+            self.closedPoints.append(p)
+            self.map[p.x][p.y].setState(CELL_STATE.CLOSE)
         pass
 
     def appendOpenPoint(self, p: Point):
-        self.openedPoints.append(p)
-        self.map[p.x][p.y].setState(CELL_STATE.OPEN)
+        if self.map[p.x][p.y].getState()[0] != CELL_STATE.OPEN:
+            self.openedPoints.append(p)
+            self.map[p.x][p.y].setState(CELL_STATE.OPEN)
         pass
 
     def appendDonePoint(self, p: Point):
-        self.donePoints.append(p)
-        self.map[p.x][p.y].setState(CELL_STATE.DONE)
+        if self.map[p.x][p.y].getState()[0] != CELL_STATE.DONE:
+            self.donePoints.append(p)
+            self.map[p.x][p.y].setState(CELL_STATE.DONE)
         pass
 
     def validatePositionByMap(self, pos: Point):
@@ -195,3 +205,6 @@ class Enviroment:
                 return False
 
         return True
+
+    # Để xóa điểm theo tọa độ (value) với độ phức tạp O(1) mà vẫn giữ
+    # tính chất của dslk thì chỉ có định nghĩa lại list
