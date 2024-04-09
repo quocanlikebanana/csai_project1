@@ -29,42 +29,17 @@ class DIRECTION(Enum):
 
 
 class Cell:
-    def __init__(self, point: Point) -> None:
-        self._state = CELL_STATE.NONE
-        self._extraInfo = None
-        self._point = point
-        self._manageList: list[Point] = None
+    def __init__(self, point: Point, state: CELL_STATE, extraInfo=None) -> None:
+        self.x = point.x
+        self.y = point.y
+        self._state = state
+        self._extraInfo = extraInfo
         pass
 
-    @property
-    def point(self):
-        return self._point
-
-    @property
-    def x(self):
-        return self._point.x
-
-    @property
-    def y(self):
-        return self._point.y
-
-    # Old
     def setState(self, state: CELL_STATE, extraInfo=None):
         self._state = state
         self._extraInfo = extraInfo  # Always reset extraInfo if not passed
         # BLOCKED with None is Border
-        # Potential bug
-
-    def setStateWithManageList(
-        self, state: CELL_STATE, newManageList: list[Point] = None, extraInfo=None
-    ):
-        self._extraInfo = extraInfo
-        if self._manageList != None:
-            self._manageList.remove(self._point)
-        if newManageList != None:
-            newManageList.append(self._point)
-        self._manageList = newManageList
-        self._state = state
 
     def getState(self):
         return self._state, self._extraInfo

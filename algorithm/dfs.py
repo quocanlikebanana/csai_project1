@@ -2,12 +2,13 @@ from algorithm.algorithm import Algorithm
 from component.enviroment import Enviroment
 from component.map import DIRECTION
 from component.point import Point
+from enum import Enum
 
 # Change IDS to DFS
 IDS_MODE = False
 
 
-class DFS_Node:
+class IDS_Node:
     def __init__(self, parent, state: Point, depth: int, cost) -> None:
         self.parent = parent
         self.state = state
@@ -23,12 +24,12 @@ class DFS_Node:
         cost = 1
         if DIRECTION.isCrossDir(dir):
             cost = 1.5
-        return DFS_Node(
+        return IDS_Node(
             self, self.state.relative(dir.value.x, dir.value.y), self.depth + 1, cost
         )
 
 
-class DFS(Algorithm):
+class IDS(Algorithm):
     def __init__(self, env: Enviroment) -> None:
         super().__init__(env)
         self.env = env
@@ -38,8 +39,8 @@ class DFS(Algorithm):
         self.cost = None
         self.found = False
         self.step = 1
-        self.frontier: list[DFS_Node] = [DFS_Node(None, self.env.startPoint, 0, 0)]
-        self.env.appendOpenPoint(self.env.startPoint)
+        self.frontier: list[IDS_Node] = [IDS_Node(None, self.env.startPoint, 0, 0)]
+        self.env.appendClosePoint(self.env.startPoint)
 
     def isDone(self):
         return self.cost != None
@@ -47,7 +48,7 @@ class DFS(Algorithm):
     def resetDFS(self):
         self.env.clearFinding()
         self.curLim += self.step
-        self.frontier: list[DFS_Node] = [DFS_Node(None, self.env.startPoint, 0, 0)]
+        self.frontier: list[IDS_Node] = [IDS_Node(None, self.env.startPoint, 0, 0)]
         self.env.appendClosePoint(self.env.startPoint)
 
     def searchOnce(self):

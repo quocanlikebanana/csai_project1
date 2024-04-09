@@ -1,6 +1,8 @@
 from component.moving import MovingPoint, VeloOrbit
 from component.point import Vector, Point
 
+FILL_POLYGON = False
+
 
 class Polygon:
     def __init__(self, vertices: list[Point], orbit: VeloOrbit = None):
