@@ -39,7 +39,7 @@ class Graphics:
         return left, top
 
     def onEveryFrameDrawn(self):
-        self.env.updateMovement()
+        # self.env.updateMovement()
         if self.runAlgorithmOnce != None:
             self.runAlgorithmOnce()
         pass
@@ -55,6 +55,8 @@ class Graphics:
         )
         pygame.display.set_caption("Path Finding")
         self.clock = pygame.time.Clock()
+        polygon_move_event = pygame.USEREVENT + 1
+        pygame.time.set_timer(polygon_move_event, 1000)
         self.updateBlockSize()
         # self.clock.tick(MAX_FPS)
         # Loop
@@ -70,6 +72,8 @@ class Graphics:
                     sys.exit()
                 if event.type == pygame.VIDEORESIZE:
                     self.updateBlockSize()
+                if event.type == polygon_move_event:
+                    self.env.updateMovement()
 
     def renderGrid(self, cellBorderColor) -> None:
         for x in range(0, self.env.ncol):

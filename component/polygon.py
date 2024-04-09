@@ -1,11 +1,11 @@
-from component.moving import ConstantOrbit, MovingPoint, LinearOrbit, RatioOrbit
+from component.moving import MovingPoint, VeloOrbit
 from component.point import Vector, Point
 
-FILL_POLYGON = True
+FILL_POLYGON = False
 
 
 class Polygon:
-    def __init__(self, vertices: list[Point], orbit: RatioOrbit = None):
+    def __init__(self, vertices: list[Point], orbit: VeloOrbit = None):
         self.vertices: list[Point] = []
         if validate(vertices):
             self.vertices = vertices

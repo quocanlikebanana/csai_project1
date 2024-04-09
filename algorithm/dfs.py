@@ -4,6 +4,9 @@ from component.map import DIRECTION
 from component.point import Point
 from enum import Enum
 
+# Change IDS to DFS
+IDS_MODE = False
+
 
 class IDS_Node:
     def __init__(self, parent, state: Point, depth: int, cost) -> None:
@@ -35,7 +38,7 @@ class IDS(Algorithm):
         self.done = False
         self.cost = None
         self.found = False
-        self.step = 10
+        self.step = 1
         self.frontier: list[IDS_Node] = [IDS_Node(None, self.env.startPoint, 0, 0)]
         self.env.appendClosePoint(self.env.startPoint)
 
@@ -63,7 +66,7 @@ class IDS(Algorithm):
                 self.cost += curNode.cost
                 curNode = curNode.parent
         else:
-            if curNode.depth != self.curLim:
+            if IDS_MODE == False or curNode.depth != self.curLim:
                 for dir in DIRECTION:
                     if self.env.validatePathMove(curNode.state, dir) == True:
                         child = curNode.getChild(dir)

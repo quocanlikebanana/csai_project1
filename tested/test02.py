@@ -1,7 +1,7 @@
 from algorithm.astar import *
 from algorithm.bfs import *
 from algorithm.dijkstra import Dijkstra
-from algorithm.ids import IDS
+from algorithm.dfs import IDS
 from component.enviroment import Enviroment
 from component.moving import ConstantOrbit, LinearOrbit, RatioOrbit
 from component.point import Point
