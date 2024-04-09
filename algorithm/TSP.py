@@ -1,6 +1,7 @@
 from enum import Enum
 import math
 import copy
+import time
 from algorithm.priorityqueue import PriorityQueue
 from component.enviroment import Enviroment
 from component.point import Point
@@ -49,11 +50,8 @@ class AS_Node:
         print("(", self.x, ",", self.y, ")", end="")
 
 
-class Edge:
-    def __init__(self,nodes,cost,vertex):
-        self.nodes = []
-        self.vertex = []
-        self.cost = cost
+
+
         
 
 class AS_Map:
@@ -107,6 +105,31 @@ class AS_Map:
         return neighbours
 
 
+
+class Edge:
+    def __init__(self,nodes,cost,vertex):
+        self.nodes = nodes
+        self.vertex = vertex
+        self.cost = cost
+    def MakeDone(self,map: AS_Map):
+        for node in self.nodes:
+            map.env.donePoints.append(Point(node.x, node.y))
+            # map.env.appendDonePoint(Point(node.x,node.y))
+    def MakeNone(self,map: AS_Map):
+        for node in self.nodes:
+            for i in map.env.donePoints:
+                if i == Point(node.x,node.y):
+                    map.env.donePoints.remove(i)
+    def HasVertex(self,vertex):
+        for i in vertex:
+            if i in self.vertex:
+                continue
+            else :
+                return False
+        return True
+        
+    
+    
 
 def FindEdge(nodes,map):
     Edge = []
@@ -166,52 +189,49 @@ class TSP:
         self.listV.append(self.map.nodes[self.map.env.endPoint.x][self.map.env.endPoint.y])
         self.heuristicFunction = heuristicFunction
         self.searching = True
-        self.Edge = []
-
-    def searchOnce(self):
-        if self.searching:
-            for i in range(len(self.listV) - 1):
+        self.Edges = []
+        self.Dist =  [[0.0 for _ in range(len(self.listV))] for _ in range(len(self.listV))]
+        for i in range(len(self.listV) - 1):
                 for j in range(i+ 1,len(self.listV)):
                     mapCopy = copy.deepcopy(self.map)
                     nodes,cost = Astar(mapCopy,self.listV[i],self.listV[j],self.heuristicFunction)
-                    self.Edge.append(Edge(nodes,cost,[self.listV[i],self.listV[j]]))
-            
-            print(len(self.Edge))  
-            self.searching = False  
+                    self.Edges.append(Edge(nodes,cost,[self.listV[i],self.listV[j]]))
+                    self.Dist[i][j] = cost
+                    self.Dist[j][i] = cost
+        self.c = [i for i in range(len(self.listV))]
+        self.endIndex = len(self.listV) 
+        self.minCost,self.path =   self.tsp(self.c,0)
+        self.currentVIndex = 0
+
+    def searchOnce(self):
+        if self.searching:
+            time.sleep(0.3)
+            if self.currentVIndex >= len(self.listV) - 2 :
+                print(self.path)
+                self.searching = False
+            for edge in self.Edges:
+                if edge.HasVertex([self.listV[self.path[self.currentVIndex]],self.listV[self.path[self.currentVIndex + 1]]]):
+                    edge.MakeDone(self.map)
+            self.currentVIndex += 1
         else:
             return True
         
+    def tsp(self,c,v):
+        if len(c) == 2 and c[0] != c[1]:
+            return self.Dist[c[0]][c[1]], [c[0], c[1]]
+        subArr = copy.deepcopy(c)
+        subArr.remove(v)
+        minCost = float('inf')
+        path = []
+
+        for i in subArr:
+            if i != self.endIndex:
+                cost, subPath = self.tsp(subArr, i)
+                cost += self.Dist[v][i]
+                if cost < minCost:
+                    minCost = cost
+                    path = [v] + subPath
+        return minCost, path
         
-        # if self.searching == False:
-        #     return False
-        # else:
-        #     if self.open.isEmpty():
-        #         raise ValueError("astar not found")
-        #     currentNode = self.open.delete()
-        #     self.close.insert(currentNode)
-        #     if currentNode != self.startNode:
-        #         currentNode.status = NodeStatus.CLOSE
-        #         self.map.env.closedPoints.append(Point(currentNode.x, currentNode.y))
-        #     if currentNode == self.targetNode:
-        #         self.searching = False
-        #         # print(currentNode.f)
-        #         currentNode.status = NodeStatus.END
-        #         while currentNode.parent != self.startNode:
-        #             currentNode.parent.status = NodeStatus.DONE
-        #             self.map.env.donePoints.append(
-        #                 Point(currentNode.parent.x, currentNode.parent.y)
-        #             )
-        #             currentNode = currentNode.parent
-        #     else:
-        #         Neighbours = []
-        #         Neighbours = self.map.GetNeighbours(currentNode)
-        #         for node in Neighbours:
-        #             node.parent = currentNode
-        #             node.h = self.heuristicFunction(node, self.targetNode)
-        #             node.f = node.g + node.h
-        #             node.status = NodeStatus.OPEN
-        #             self.map.env.openedPoints.append(Point(node.x, node.y))
-        #             self.open.insert(node)
-        #     return True
-    
+      
    
