@@ -1,5 +1,5 @@
 from enum import Enum
-from component.map import CELL_STATE, DIRECTION, Cell
+from component.map import CELL_STATE, DIRECTION, Cell, StateTrigger
 from component.point import Point, Vector
 from component.polygon import Polygon
 
@@ -46,26 +46,23 @@ class Enviroment:
         self.closedPoints: list[Point] = []
         self.donePoints: list[Point] = []
         ## Update
+        self._stateTrigger = None
         self._frontier = []
         self._explored = []
 
     # these points are not managed by env or changeable
     def _updateMap(self):
-        self.map[self.startPoint.x][self.startPoint.y].setStateWithManageList(
+        self.map[self.startPoint.x][self.startPoint.y].setStateWithTrigger(
             CELL_STATE.START
         )
-        self.map[self.endPoint.x][self.endPoint.y].setStateWithManageList(
-            CELL_STATE.END
-        )
+        self.map[self.endPoint.x][self.endPoint.y].setStateWithTrigger(CELL_STATE.END)
         for p in self.pickupPoints:
-            self.map[p.x][p.y].setStateWithManageList(CELL_STATE.PICKUP)
+            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.PICKUP)
         for p in self.borderPoints:
-            self.map[p.x][p.y].setStateWithManageList(CELL_STATE.BLOCKED)
+            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.BLOCKED)
         for id in self.polygons:
             for p in self.polygons[id].points:
-                self.map[p.x][p.y].setStateWithManageList(
-                    CELL_STATE.BLOCKED, extraInfo=id
-                )
+                self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.BLOCKED, extraInfo=id)
         pass
 
     def _updatePolyPoints(self):
@@ -103,6 +100,12 @@ class Enviroment:
             return False
         return True
 
+    def injectTrigger(self, stateTriggers: list[StateTrigger]):
+        for c in self.map:
+            for r in c:
+                r.setTriggers(stateTriggers)
+        pass
+
     def moveAllPolygons(self):
         # Still slower even when no validating
         if self.moving == True:
@@ -114,10 +117,10 @@ class Enviroment:
                     pmv, self.polygons[id]
                 ):
                     for p in self.polygons[id].points:
-                        self.map[p.x][p.y].setStateWithManageList(CELL_STATE.NONE)
+                        self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.NONE)
                     self.polygons[id].move(pmv)
                     for p in self.polygons[id].points:
-                        self.map[p.x][p.y].setStateWithManageList(
+                        self.map[p.x][p.y].setStateWithTrigger(
                             CELL_STATE.BLOCKED, extraInfo=id
                         )
             self._updatePolyPoints()
@@ -165,28 +168,24 @@ class Enviroment:
     def clearFinding(self):
         allFindingPoints = self.closedPoints + self.openedPoints
         for p in allFindingPoints:
-            self.map[p.x][p.y].setStateWithManageList(CELL_STATE.NONE)
+            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.NONE)
         self.closedPoints.clear()
         self.openedPoints.clear()
         pass
 
     def appendClosePoint(self, p: Point):
         if self.map[p.x][p.y].getState()[0] != CELL_STATE.CLOSE:
-            self.map[p.x][p.y].setStateWithManageList(
-                CELL_STATE.CLOSE, self.closedPoints
-            )
+            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.CLOSE, self.closedPoints)
         pass
 
     def appendOpenPoint(self, p: Point):
         if self.map[p.x][p.y].getState()[0] != CELL_STATE.OPEN:
-            self.map[p.x][p.y].setStateWithManageList(
-                CELL_STATE.OPEN, self.openedPoints
-            )
+            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.OPEN, self.openedPoints)
         pass
 
     def appendDonePoint(self, p: Point):
         if self.map[p.x][p.y].getState()[0] != CELL_STATE.DONE:
-            self.map[p.x][p.y].setStateWithManageList(CELL_STATE.DONE, self.donePoints)
+            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.DONE, self.donePoints)
         pass
 
     def validatePositionByMap(self, pos: Point):

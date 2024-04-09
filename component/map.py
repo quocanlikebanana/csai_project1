@@ -1,5 +1,7 @@
 from enum import Enum
+from typing import Callable
 from component.point import Point
+from inspect import signature
 
 
 class CELL_STATE(Enum):
@@ -28,12 +30,38 @@ class DIRECTION(Enum):
         return dir.value.x != 0 and dir.value.y != 0
 
 
+# This is serve for enviroment state change, not from the algorithm (like a block is moving)
+
+
+class StateTrigger:
+    def __init__(self, before: CELL_STATE, after: CELL_STATE, trigger) -> None:
+        self._before = before
+        self._after = after
+        self._trigger = trigger
+        pass
+
+    def checkTriggerToCall(self, before: CELL_STATE, after: CELL_STATE, point: Point):
+        if before == self._before and after == self._after:
+            return self._trigger(point)
+        return None
+
+
+def stateTriggersFactory(openToBlock, closeToBlock, blockToNone):
+    return [
+        StateTrigger(CELL_STATE.OPEN, CELL_STATE.BLOCKED, openToBlock),
+        StateTrigger(CELL_STATE.CLOSE, CELL_STATE.BLOCKED, closeToBlock),
+        StateTrigger(CELL_STATE.BLOCKED, CELL_STATE.NONE, blockToNone),
+    ]
+    pass
+
+
 class Cell:
     def __init__(self, point: Point) -> None:
         self._state = CELL_STATE.NONE
         self._extraInfo = None
         self._point = point
         self._manageList: list[Point] = None
+        self._stateTrigger: list[StateTrigger] = []
         pass
 
     @property
@@ -48,12 +76,12 @@ class Cell:
     def y(self):
         return self._point.y
 
-    # Old
-    def setState(self, state: CELL_STATE, extraInfo=None):
-        self._state = state
-        self._extraInfo = extraInfo  # Always reset extraInfo if not passed
-        # BLOCKED with None is Border
-        # Potential bug
+    def setTriggers(self, stateTriggers: list[StateTrigger]):
+        self._stateTrigger = stateTriggers
+        pass
+
+    def getState(self):
+        return self._state, self._extraInfo
 
     def setStateWithManageList(
         self, state: CELL_STATE, newManageList: list[Point] = None, extraInfo=None
@@ -66,5 +94,21 @@ class Cell:
         self._manageList = newManageList
         self._state = state
 
-    def getState(self):
-        return self._state, self._extraInfo
+    def setStateWithTrigger(
+        self, state: CELL_STATE, extraInfo=None, beforeUpdateCell=None
+    ):
+        self.trigger(state)
+        self._extraInfo = extraInfo
+        pass
+
+    def trigger(self, state):
+        for st in self._stateTrigger:
+            st.checkTriggerToCall(self._state, state, self.point)
+        self._state = state
+
+    # Old
+    def setState(self, state: CELL_STATE, extraInfo=None):
+        self._state = state
+        self._extraInfo = extraInfo  # Always reset extraInfo if not passed
+        # BLOCKED with None is Border
+        # Potential bug
