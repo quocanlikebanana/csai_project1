@@ -1,8 +1,6 @@
 from component.moving import MovingPoint, VeloOrbit
 from component.point import Vector, Point
 
-FILL_POLYGON = True
-
 
 class Polygon:
     def __init__(self, vertices: list[Point], orbit: VeloOrbit = None):
@@ -33,8 +31,6 @@ class Polygon:
             self.edges.append(vec)
 
     def _updateInternalPoints(self):
-        if FILL_POLYGON == False:
-            return
         self.internalPoints.clear()
 
         # Since its a polygon so max/min point are all a vertex

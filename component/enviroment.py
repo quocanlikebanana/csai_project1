@@ -197,7 +197,7 @@ class Enviroment:
             return True
         return False
 
-    def validatePathMove(self, pos: Point, dir: DIRECTION):
+    def validateMove(self, pos: Point, dir: DIRECTION):
         dest = pos.relative(dir.value.x, dir.value.y)
         if (
             self.validatePositionByMap(dest) == False
@@ -216,6 +216,3 @@ class Enviroment:
                 return False
 
         return True
-
-    # Để xóa điểm theo tọa độ (value) với độ phức tạp O(1) mà vẫn giữ
-    # tính chất của dslk thì chỉ có định nghĩa lại list

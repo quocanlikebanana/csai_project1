@@ -3,7 +3,7 @@ from algorithm.bfs import *
 from algorithm.dijkstra import Dijkstra
 from algorithm.dfs import DFS
 from component.enviroment import Enviroment
-from component.moving import VeloOrbit
+from component.moving import ConstantOrbit, LinearOrbit, RatioOrbit, SimpleOrbit
 from component.point import Point
 from component.polygon import Polygon
 from graphics.drawer import Drawer
@@ -33,7 +33,7 @@ def test():
             VeloOrbit([(1, 1, 1), (-1, -1, 1)]),
         ),
     ]
-    env = Enviroment(30, 30, Point(1, 1), Point(28, 28), [], pl)
+    env = Enviroment(30, 30, Point(1, 1), Point(28, 28), [Point(10,20),Point(2,10),Point(8,5),Point(20,5)], pl)
 
     # BFS
     bfs = BFS(env)
@@ -54,5 +54,13 @@ if __name__ == "__main__":
     ps = pstats.Stats("test_stats", stream=s)
     ps.sort_stats(SortKey.TIME).print_stats(0.20)
 
+
     with open("test.txt", "w+") as f:
         f.write(s.getvalue())
+
+    # profiler = cProfile.Profile()
+    # profiler.enable()
+    # test()
+    # profiler.disable()
+    # stats = pstats.Stats(profiler).sort_stats("ncalls")
+    # stats.print_stats()
