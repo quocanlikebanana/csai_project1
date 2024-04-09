@@ -53,6 +53,7 @@ if __name__ == "__main__":
     ps = pstats.Stats("test_stats", stream=s)
     ps.sort_stats(SortKey.TIME).print_stats(0.20)
 
+
     with open("test.txt", "w+") as f:
         f.write(s.getvalue())
 
