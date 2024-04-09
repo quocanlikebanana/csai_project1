@@ -30,7 +30,7 @@ class Enviroment:
         self.borderPoints: list[Point] = []
         self._updatePolyPoints()
         self._updateBorderPoints()
-        self._validateEnv()
+        self.validateEnv()
         ## ====
         ## After this, the enviroment is valid
         self.moving = False
@@ -40,25 +40,32 @@ class Enviroment:
                 break
         self.blockPoints: list[Point] = []
         self._updateBlockPoints()
-        self.map = [
-            [Cell(Point(x, y), CELL_STATE.NONE) for y in range(nrow)]
-            for x in range(ncol)
-        ]
+        self.map = [[Cell(Point(x, y)) for y in range(nrow)] for x in range(ncol)]
         self._updateMap()
         self.openedPoints: list[Point] = []
         self.closedPoints: list[Point] = []
         self.donePoints: list[Point] = []
+        ## Update
+        self._frontier = []
+        self._explored = []
 
+    # these points are not managed by env or changeable
     def _updateMap(self):
-        self.map[self.startPoint.x][self.startPoint.y]._state = CELL_STATE.START
-        self.map[self.endPoint.x][self.endPoint.y]._state = CELL_STATE.END
+        self.map[self.startPoint.x][self.startPoint.y].setStateWithManageList(
+            CELL_STATE.START
+        )
+        self.map[self.endPoint.x][self.endPoint.y].setStateWithManageList(
+            CELL_STATE.END
+        )
         for p in self.pickupPoints:
-            self.map[p.x][p.y].setState(CELL_STATE.PICKUP)
+            self.map[p.x][p.y].setStateWithManageList(CELL_STATE.PICKUP)
         for p in self.borderPoints:
-            self.map[p.x][p.y].setState(CELL_STATE.BLOCKED, None)
+            self.map[p.x][p.y].setStateWithManageList(CELL_STATE.BLOCKED)
         for id in self.polygons:
             for p in self.polygons[id].points:
-                self.map[p.x][p.y].setState(CELL_STATE.BLOCKED, id)
+                self.map[p.x][p.y].setStateWithManageList(
+                    CELL_STATE.BLOCKED, extraInfo=id
+                )
         pass
 
     def _updatePolyPoints(self):
@@ -80,23 +87,6 @@ class Enviroment:
             self.borderPoints.append(Point(self.ncol - 1, y))
         self._updateBlockPoints()
 
-    def updateMovement(self):
-        # Still slower even when no validating
-        if self.moving == True:
-            for id in self.polygons:
-                pmv = self.polygons[id].getPesudoMoving()
-                ## New way of validating:
-                # check if point on map is in other polygon instead
-                if CHECK_POLYGON_MOVE == False or self.validatePolygonVertices(
-                    pmv, self.polygons[id]
-                ):
-                    for p in self.polygons[id].points:
-                        self.map[p.x][p.y].setState(CELL_STATE.NONE)
-                    self.polygons[id].move(pmv)
-                    for p in self.polygons[id].points:
-                        self.map[p.x][p.y].setState(CELL_STATE.BLOCKED, id)
-            self._updatePolyPoints()
-
     def _checkInRange(self, point: Point) -> bool:
         # Border is 1 pixel
         if (
@@ -112,6 +102,25 @@ class Enviroment:
         if point in self.polyPoints:
             return False
         return True
+
+    def moveAllPolygons(self):
+        # Still slower even when no validating
+        if self.moving == True:
+            for id in self.polygons:
+                pmv = self.polygons[id].getPesudoMoving()
+                ## New way of validating:
+                # check if point on map is in other polygon instead
+                if CHECK_POLYGON_MOVE == False or self.validatePolygonVertices(
+                    pmv, self.polygons[id]
+                ):
+                    for p in self.polygons[id].points:
+                        self.map[p.x][p.y].setStateWithManageList(CELL_STATE.NONE)
+                    self.polygons[id].move(pmv)
+                    for p in self.polygons[id].points:
+                        self.map[p.x][p.y].setStateWithManageList(
+                            CELL_STATE.BLOCKED, extraInfo=id
+                        )
+            self._updatePolyPoints()
 
     # vertices might not from polygon, it could be pesudo ones
     def validatePolygonVertices(self, vertices: list[Point], polygon: Polygon) -> bool:
@@ -135,7 +144,7 @@ class Enviroment:
                 return False
         return True
 
-    def _validateEnv(self):
+    def validateEnv(self):
         if not self.validatePositionByList(
             self.startPoint
         ) or not self.validatePositionByList(self.endPoint):
@@ -156,26 +165,28 @@ class Enviroment:
     def clearFinding(self):
         allFindingPoints = self.closedPoints + self.openedPoints
         for p in allFindingPoints:
-            self.map[p.x][p.y].setState(CELL_STATE.NONE)
+            self.map[p.x][p.y].setStateWithManageList(CELL_STATE.NONE)
         self.closedPoints.clear()
         self.openedPoints.clear()
+        pass
 
     def appendClosePoint(self, p: Point):
         if self.map[p.x][p.y].getState()[0] != CELL_STATE.CLOSE:
-            self.closedPoints.append(p)
-            self.map[p.x][p.y].setState(CELL_STATE.CLOSE)
+            self.map[p.x][p.y].setStateWithManageList(
+                CELL_STATE.CLOSE, self.closedPoints
+            )
         pass
 
     def appendOpenPoint(self, p: Point):
         if self.map[p.x][p.y].getState()[0] != CELL_STATE.OPEN:
-            self.openedPoints.append(p)
-            self.map[p.x][p.y].setState(CELL_STATE.OPEN)
+            self.map[p.x][p.y].setStateWithManageList(
+                CELL_STATE.OPEN, self.openedPoints
+            )
         pass
 
     def appendDonePoint(self, p: Point):
         if self.map[p.x][p.y].getState()[0] != CELL_STATE.DONE:
-            self.donePoints.append(p)
-            self.map[p.x][p.y].setState(CELL_STATE.DONE)
+            self.map[p.x][p.y].setStateWithManageList(CELL_STATE.DONE, self.donePoints)
         pass
 
     def validatePositionByMap(self, pos: Point):

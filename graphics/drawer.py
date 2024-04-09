@@ -1,3 +1,4 @@
+from component.map import CELL_STATE, Cell
 from component.point import Point
 from graphics.graphics import Graphics  # Because name conflict
 from graphics.color import *
@@ -8,7 +9,8 @@ class Drawer:
     def __init__(self, env: Enviroment) -> None:
         self.env = env
         self.polycolors = genRandomDistinctColor(len(self.env.polygons))
-        self.graphics = Graphics(env, self.drawAll)
+        # self.graphics = Graphics(env, self.drawAll)
+        self.graphics = Graphics(env, self.drawAllByMap)
 
     def run(self):
         self.graphics.run()
@@ -24,6 +26,70 @@ class Drawer:
         self.drawStartEndPoint()
         self.graphics.renderGrid(BASE_COLOR["BLACK"])  # Draw this last to avoid overlap
         # Có thể cải tiến render đồng bộ
+
+    def drawAllByMap(self):
+        for x in range(self.env.ncol):
+            for y in range(self.env.nrow):
+                self.switchPixelDraw(self.env.map[x][y])
+        self.drawOverlay()
+        self.graphics.renderGrid(BASE_COLOR["BLACK"])  # Draw this last to avoid overlap
+
+    def drawOverlay(self):
+        self.drawStartPixel(self.env.startPoint)
+        self.drawEndPixel(self.env.endPoint)
+        for p in self.env.pickupPoints:
+            self.drawPickupPixel(p)
+        pass
+
+    def switchPixelDraw(self, cell: Cell):
+        state = cell.getState()[0]
+        if state == CELL_STATE.BLOCKED:
+            self.drawBlockPixel(cell.point, cell.getState()[1])
+        elif state == CELL_STATE.OPEN:
+            self.drawOpenPixel(cell.point)
+        elif state == CELL_STATE.CLOSE:
+            self.drawClosePixel(cell.point)
+        elif state == CELL_STATE.DONE:
+            self.drawDonePixel(cell.point)
+        pass
+
+    def drawStartPixel(self, point: Point):
+        self.graphics.renderFilledPixel(point, BASE_COLOR["BLUE"])
+        self.graphics.renderSymbolPixel(point, "S")
+        pass
+
+    def drawEndPixel(self, point: Point):
+        self.graphics.renderFilledPixel(point, BASE_COLOR["PINK"])
+        self.graphics.renderSymbolPixel(point, "E")
+        pass
+
+    def drawPickupPixel(self, point: Point):
+        self.graphics.renderFilledPixel(point, BASE_COLOR["TEAL"])
+        pass
+
+    def drawBlockPixel(self, point: Point, id=None):
+        if id == None:
+            self.graphics.renderFilledPixel(point, BASE_COLOR["GRAY"])
+        else:
+            self.graphics.renderFilledPixel(
+                point, self.polycolors[id % len(self.polycolors)]
+            )
+        pass
+
+    def drawOpenPixel(self, point: Point):
+        self.graphics.renderFilledPixel(point, BASE_COLOR["GREEN"])
+        pass
+
+    def drawClosePixel(self, point: Point):
+        self.graphics.renderFilledPixel(point, BASE_COLOR["RED"])
+        pass
+
+    def drawDonePixel(self, point: Point):
+        self.graphics.renderFilledPixel(point, BASE_COLOR["YELLOW"])
+        self.graphics.renderSymbolPixel(point, "+")
+        pass
+
+    # Old
 
     def drawMapBorder(self):
         for p in self.env.borderPoints:

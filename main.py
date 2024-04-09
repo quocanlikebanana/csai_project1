@@ -1,7 +1,7 @@
 from algorithm.astar import *
 from algorithm.bfs import *
 from algorithm.dijkstra import Dijkstra
-from algorithm.dfs import IDS
+from algorithm.dfs import DFS
 from component.enviroment import Enviroment
 from component.moving import VeloOrbit
 from component.point import Point
@@ -38,9 +38,9 @@ def test():
     # BFS
     bfs = BFS(env)
     astar = AStar(AS_Map(env), EuclideanHeuristic)
-    ids = IDS(env)
+    dfs = DFS(env)
     dij = Dijkstra(env)
-    main = Main(env, ids.searchOnce)
+    main = Main(env, dfs.searchOnce)
     main.run()
 
 

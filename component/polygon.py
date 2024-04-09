@@ -1,7 +1,7 @@
 from component.moving import MovingPoint, VeloOrbit
 from component.point import Vector, Point
 
-FILL_POLYGON = False
+FILL_POLYGON = True
 
 
 class Polygon:

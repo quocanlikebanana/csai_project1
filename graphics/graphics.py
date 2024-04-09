@@ -11,7 +11,7 @@ MAX_FPS = 100
 
 
 class Graphics:
-    def __init__(self, env: Enviroment, runDraw) -> None:
+    def __init__(self, env: Enviroment, drawAll) -> None:
         self.env = env
         self.MAR_X = 30
         self.MAR_Y = 30
@@ -25,7 +25,7 @@ class Graphics:
         self.surface = None
         self.font = None
         self.clock = None
-        self.runDraw = runDraw
+        self.drawAll = drawAll
         self.runAlgorithmOnce = None
 
     def updateBlockSize(self):
@@ -62,9 +62,10 @@ class Graphics:
         # Loop
         while True:
             self.surface.fill(BASE_COLOR["WHITE"])
-            self.runDraw()
+            self.drawAll()
             self.onEveryFrameDrawn()
             pygame.display.update()
+            # pygame.time.delay(200)
             # Event
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -73,7 +74,7 @@ class Graphics:
                 if event.type == pygame.VIDEORESIZE:
                     self.updateBlockSize()
                 if event.type == polygon_move_event:
-                    self.env.updateMovement()
+                    self.env.moveAllPolygons()
 
     def renderGrid(self, cellBorderColor) -> None:
         for x in range(0, self.env.ncol):
