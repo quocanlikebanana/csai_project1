@@ -113,7 +113,7 @@ class Edge:
         self.cost = cost
     def MakeDone(self,map: AS_Map):
         for node in self.nodes:
-            map.env.donePoints.append(Point(node.x, node.y))
+            map.env.appendDonePoint(Point(node.x, node.y))
             # map.env.appendDonePoint(Point(node.x,node.y))
     def MakeNone(self,map: AS_Map):
         for node in self.nodes:

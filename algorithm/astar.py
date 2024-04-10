@@ -129,14 +129,14 @@ class AStar:
             self.close.insert(currentNode)
             if currentNode != self.startNode:
                 currentNode.status = NodeStatus.CLOSE
-                self.map.env.closedPoints.append(Point(currentNode.x, currentNode.y))
+                self.map.env.appendClosePoint(Point(currentNode.x, currentNode.y))
             if currentNode == self.targetNode:
                 self.searching = False
                 # print(currentNode.f)
                 currentNode.status = NodeStatus.END
                 while currentNode.parent != self.startNode:
                     currentNode.parent.status = NodeStatus.DONE
-                    self.map.env.donePoints.append(
+                    self.map.env.appendDonePoint(
                         Point(currentNode.parent.x, currentNode.parent.y)
                     )
                     currentNode = currentNode.parent
@@ -148,6 +148,6 @@ class AStar:
                     node.h = self.heuristicFunction(node, self.targetNode)
                     node.f = node.g + node.h
                     node.status = NodeStatus.OPEN
-                    self.map.env.openedPoints.append(Point(node.x, node.y))
+                    self.map.env.appendOpenPoint(Point(node.x, node.y))
                     self.open.insert(node)
             return True
