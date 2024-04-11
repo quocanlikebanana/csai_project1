@@ -7,7 +7,7 @@ from component.moving import ConstantOrbit, LinearOrbit, RatioOrbit, SimpleOrbit
 from component.point import Point
 from component.polygon import Polygon
 from graphics.drawer import Drawer
-
+from input.input import InputReader
 
 class Main:
     def __init__(self, env, searchOnce=None) -> None:

@@ -18,6 +18,11 @@ class Polygon:
         self._updateTranslates()
         self._updateEdges()
         self._updateInternalPoints()  # No need To Fill
+    def __str__(self) -> str:
+            tmp = ''
+            for i in range(len(self.vertices)):
+                tmp = tmp + self.vertices[i].__str__()+ " "
+            return tmp
 
     @property
     def points(self):
