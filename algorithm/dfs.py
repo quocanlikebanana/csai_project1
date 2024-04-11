@@ -40,7 +40,9 @@ class DFS(Algorithm):
         self.cost = None
         self.found = False
         self.step = 1
-        self.subMap_Explored = [[[] for _ in self.env.nrow] for _ in self.env.ncol]
+        self.subMap_Explored = [
+            [[] for _ in range(self.env.nrow)] for _ in range(self.env.ncol)
+        ]
         self.frontier: list[DFS_Node] = [DFS_Node(None, self.env.startPoint, 0, 0)]
         self.env.appendOpenPoint(self.env.startPoint)
         self.env.injectTrigger(

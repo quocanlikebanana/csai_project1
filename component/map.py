@@ -21,13 +21,33 @@ class DIRECTION(Enum):
     DOWN = Point(0, 1)
     UP = Point(0, -1)
     RIGHTDOWN = Point(1, 1)
-    LEFTTOP = Point(-1, -1)
-    RIGHTTOP = Point(1, -1)
+    LEFTUP = Point(-1, -1)
+    RIGHTUP = Point(1, -1)
     LEFTDOWN = Point(-1, 1)
 
     @staticmethod
     def isCrossDir(dir):
         return dir.value.x != 0 and dir.value.y != 0
+
+    @staticmethod
+    def getSymbol(dir):
+        if dir == DIRECTION.LEFT:
+            return "←"
+        if dir == DIRECTION.RIGHT:
+            return "→"
+        if dir == DIRECTION.DOWN:
+            return "↓"
+        if dir == DIRECTION.UP:
+            return "↑"
+        if dir == DIRECTION.LEFTUP:
+            return "↖"
+        if dir == DIRECTION.LEFTDOWN:
+            return "↙"
+        if dir == DIRECTION.RIGHTUP:
+            return "↗"
+        if dir == DIRECTION.RIGHTDOWN:
+            return "↘"
+        pass
 
 
 # This is serve for enviroment state change, not from the algorithm (like a block is moving)

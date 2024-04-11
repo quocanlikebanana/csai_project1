@@ -46,6 +46,8 @@ class Enviroment:
         self.closedPoints: list[Point] = []
         self.donePoints: list[Point] = []
         ## Update
+        self.onPolygonMoveTrigger = None
+        self.charOverlay = []  # For Testing
         self._stateTrigger = None
         self._frontier = []
         self._explored = []
@@ -84,7 +86,7 @@ class Enviroment:
             self.borderPoints.append(Point(self.ncol - 1, y))
         self._updateBlockPoints()
 
-    def _checkInRange(self, point: Point) -> bool:
+    def checkInBorder(self, point: Point) -> bool:
         # Border is 1 pixel
         if (
             point.x > 0
@@ -95,7 +97,7 @@ class Enviroment:
             return True
         return False
 
-    def _checkNotOnPolygon(self, point: Point) -> bool:
+    def checkNotOnPolygon(self, point: Point) -> bool:
         if point in self.polyPoints:
             return False
         return True
@@ -109,6 +111,7 @@ class Enviroment:
     def moveAllPolygons(self):
         # Still slower even when no validating
         if self.moving == True:
+            changedPoints: list[Point] = []
             for id in self.polygons:
                 pmv = self.polygons[id].getPesudoMoving()
                 ## New way of validating:
@@ -116,6 +119,7 @@ class Enviroment:
                 if CHECK_POLYGON_MOVE == False or self.validatePolygonVertices(
                     pmv, self.polygons[id]
                 ):
+                    beforeMoving = self.polygons[id].points.copy()
                     for p in self.polygons[id].points:
                         self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.NONE)
                     self.polygons[id].move(pmv)
@@ -123,7 +127,11 @@ class Enviroment:
                         self.map[p.x][p.y].setStateWithTrigger(
                             CELL_STATE.BLOCKED, extraInfo=id
                         )
+                    if self.onPolygonMoveTrigger != None:
+                        afterMoving = self.polygons[id].points.copy()
+                        changedPoints.extend(list(set(beforeMoving + afterMoving)))
             self._updatePolyPoints()
+            self.onPolygonMoveTrigger(changedPoints)
 
     # vertices might not from polygon, it could be pesudo ones
     def validatePolygonVertices(self, vertices: list[Point], polygon: Polygon) -> bool:
@@ -134,7 +142,7 @@ class Enviroment:
             for p in vec.points:
                 testEdgePoints.append(p)
         for v in testEdgePoints:
-            if not self._checkInRange(v):
+            if not self.checkInBorder(v):
                 return False
             # Check for crossed polygon
             otherPolyPoints = [
@@ -161,16 +169,17 @@ class Enviroment:
         return True
 
     def validatePositionByList(self, pos: Point):
-        if self._checkInRange(pos) and self._checkNotOnPolygon(pos):
+        if self.checkInBorder(pos) and self.checkNotOnPolygon(pos):
             return True
         return False
 
     def clearFinding(self):
-        allFindingPoints = self.closedPoints + self.openedPoints
+        allFindingPoints = self.closedPoints + self.openedPoints + self.donePoints
         for p in allFindingPoints:
             self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.NONE)
         self.closedPoints.clear()
         self.openedPoints.clear()
+        self.donePoints.clear()
         pass
 
     def appendClosePoint(self, p: Point):
@@ -188,9 +197,13 @@ class Enviroment:
             self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.DONE, self.donePoints)
         pass
 
+    def overlayCharOnMap(self, p: Point, str):
+        self.charOverlay.append((p, str))
+        return
+
     def validatePositionByMap(self, pos: Point):
         if (
-            self._checkInRange(pos)
+            self.checkInBorder(pos)
             and self.map[pos.x][pos.y].getState()[0] != CELL_STATE.BLOCKED
         ):
             return True
@@ -213,8 +226,4 @@ class Enviroment:
                 and hor[1] == ver[1]
             ):
                 return False
-
         return True
-
-    # Để xóa điểm theo tọa độ (value) với độ phức tạp O(1) mà vẫn giữ
-    # tính chất của dslk thì chỉ có định nghĩa lại list

@@ -42,6 +42,7 @@ class Graphics:
         # self.env.updateMovement()
         if self.runAlgorithmOnce != None:
             self.runAlgorithmOnce()
+            # pygame.time.delay(1000)
         pass
 
     def run(self) -> None:

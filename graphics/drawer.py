@@ -25,20 +25,21 @@ class Drawer:
         self.drawDone()
         self.drawStartEndPoint()
         self.graphics.renderGrid(BASE_COLOR["BLACK"])  # Draw this last to avoid overlap
-        # Có thể cải tiến render đồng bộ
 
     def drawAllByMap(self):
         for x in range(self.env.ncol):
             for y in range(self.env.nrow):
                 self.switchPixelDraw(self.env.map[x][y])
-        self.drawOverlay()
+        self.drawOverlayInit()
         self.graphics.renderGrid(BASE_COLOR["BLACK"])  # Draw this last to avoid overlap
 
-    def drawOverlay(self):
+    def drawOverlayInit(self):
         self.drawStartPixel(self.env.startPoint)
         self.drawEndPixel(self.env.endPoint)
         for p in self.env.pickupPoints:
             self.drawPickupPixel(p)
+        for s in self.env.charOverlay:
+            self.graphics.renderSymbolPixel(s[0], s[1])
         pass
 
     def switchPixelDraw(self, cell: Cell):
@@ -89,6 +90,11 @@ class Drawer:
         self.graphics.renderSymbolPixel(point, "+")
         pass
 
+    # Old
+    # Old
+    # Old
+    # Old
+    # Old
     # Old
 
     def drawMapBorder(self):
