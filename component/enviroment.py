@@ -184,17 +184,20 @@ class Enviroment:
 
     def appendClosePoint(self, p: Point):
         if self.map[p.x][p.y].getState()[0] != CELL_STATE.CLOSE:
-            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.CLOSE, self.closedPoints)
+            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.CLOSE)
+            self.closedPoints.append(p)
         pass
 
     def appendOpenPoint(self, p: Point):
         if self.map[p.x][p.y].getState()[0] != CELL_STATE.OPEN:
-            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.OPEN, self.openedPoints)
+            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.OPEN)
+            self.openedPoints.append(p)
         pass
 
     def appendDonePoint(self, p: Point):
         if self.map[p.x][p.y].getState()[0] != CELL_STATE.DONE:
-            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.DONE, self.donePoints)
+            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.DONE)
+            self.donePoints.append(p)
         pass
 
     def overlayCharOnMap(self, p: Point, str):
