@@ -42,7 +42,7 @@ class Graphics:
         # self.env.updateMovement()
         if self.runAlgorithmOnce != None:
             self.runAlgorithmOnce()
-            # pygame.time.delay(1000)
+            pygame.time.delay(100)
         pass
 
     def run(self) -> None:
@@ -74,7 +74,7 @@ class Graphics:
                     sys.exit()
                 if event.type == pygame.VIDEORESIZE:
                     self.updateBlockSize()
-                if event.type == polygon_move_event:
+                if event.type == polygon_move_event and self.env.allowMove == True:
                     self.env.moveAllPolygons()
 
     def renderGrid(self, cellBorderColor) -> None:

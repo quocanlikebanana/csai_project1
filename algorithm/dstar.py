@@ -105,7 +105,7 @@ class DStar(Algorithm):
         self.done = False
         self.doneCompute = False
         self.hFunc = hFunc
-        self.startNode: DS_Node = None
+        self.agentNode: DS_Node = None
         self.map = [
             [
                 DS_Node(Point(x, y), math.inf, math.inf, self._getHeuristic)
@@ -114,8 +114,10 @@ class DStar(Algorithm):
             for x in range(self.env.ncol)
         ]
         self.env.onPolygonMoveTrigger = self.onPolygonMove
+        self.affectedPoints: list[Point] = []
         self.init()
         self.computePath()
+        self.findPath()
 
     def getAdjacent(self, node: DS_Node):
         result: list[tuple[DS_Node, float, DIRECTION]] = []
@@ -137,7 +139,8 @@ class DStar(Algorithm):
         self.goalNode.rhs = 0
         self.frontier = DS_Frontier()
         self.frontier.update(self.goalNode)
-        self.startNode = self.map[self.env.startPoint.x][self.env.startPoint.y]
+        self.agentNode = self.map[self.env.startPoint.x][self.env.startPoint.y]
+        self.env.agentPoint = self.agentNode.state
 
     def _getHeuristic(self, curNode: DS_Node):
         return self.hFunc(curNode, self.env.endPoint)
@@ -149,8 +152,8 @@ class DStar(Algorithm):
             #     print("============")
             #     printEnvMap(self.env.map)
             if not (
-                self.startNode.isConsistent() == False
-                or keyCompare(self.frontier.topKey(), self.startNode.getKeys()) == -1
+                self.agentNode.isConsistent() == False
+                or keyCompare(self.frontier.topKey(), self.agentNode.getKeys()) == -1
             ):
                 # printMap(self.map)
                 # print("============")
@@ -166,28 +169,24 @@ class DStar(Algorithm):
             for p in pre:
                 self.updateNode(p[0])
             pass
-        # printMap(self.map)
-        # print("============")
-        # printEnvMap(self.env.map)
         self.doneCompute = True
-        print("=" * 50)
-        printMapDir(self.map)
+        # print("=" * 50)
+        # printMapDir(self.map)
         # print("*" * 10)
         # printEnvMap(self.env.map)
-        print("=" * 50)
+        # print("=" * 50)
         pass
 
     def updateNode(self, node: DS_Node):
         if node.state != self.goalNode.state:
             suc = self.getAdjacent(node)
-            node.rhs = math.inf  ###
             node.successorGradient = None
             node.charSymbol = "·"
             # Note: min here doesnt include itself
             if len(suc) > 0:
                 minrhs = suc[0][0].g + suc[0][1]
-                sucGrad = None
-                charSym = "·"
+                sucGrad = suc[0][0]
+                charSym = suc[0][2]
                 for s in suc:
                     if s[0].g + s[1] < minrhs:
                         minrhs = s[0].g + s[1]
@@ -202,33 +201,40 @@ class DStar(Algorithm):
         pass
 
     def onPolygonMove(self, points: list[Point]):
-        for p in points:
-            self.updateNode(self.map[p.x][p.y])
-        if len(points) > 0:
-            self.done = False
-            self.doneCompute = False
-            self.env.clearFinding()
-            self.startNode = self.map[self.env.startPoint.x][self.env.startPoint.y]
-            self.computePath()
+        # vẫn còn hơi conflict chỗ này do đang update point thì đa giác lại di chuyển (xài doneCompute như semaphore)
+        if self.doneCompute == True:
+            self.affectedPoints = points
         pass
 
     def searchOnce(self):
         if self.done == True:
             return
-        if self.startNode.state != self.goalNode.state:
-            if self.startNode.g == math.inf:
-                raise ValueError("dstar not found")
-            self.startNode = self.startNode.successorGradient
-            self.env.appendClosePoint(self.startNode.state)
-        else:
+        if len(self.affectedPoints) > 0:
+            self.env.allowMove = False
+            self.env.closedPoints.clear()
+            for p in self.affectedPoints:
+                self.updateNode(self.map[p.x][p.y])
+            self.done = False
+            self.doneCompute = False
+            self.computePath()
             self.findPath()
+            self.affectedPoints.clear()
+            self.env.allowMove = True
+        if self.agentNode.state != self.goalNode.state:
+            if self.agentNode.g == math.inf:
+                raise ValueError("dstar not found")
+            # If path still found
+            self.env.donePoints.append(self.agentNode.state)
+            self.agentNode = self.agentNode.successorGradient
+            self.env.agentPoint = self.agentNode.state
+        else:
+            self.done = True
         pass
 
     def findPath(self):
-        self.done = True
-        traversalStart = self.map[self.env.startPoint.x][self.env.startPoint.y]
+        traversalStart = self.agentNode
         while traversalStart.successorGradient != None:
-            self.env.appendDonePoint(traversalStart.state)
+            self.env.closedPoints.append(traversalStart.state)
             traversalStart = traversalStart.successorGradient
 
 

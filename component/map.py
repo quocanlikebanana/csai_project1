@@ -79,6 +79,7 @@ class Cell:
     def __init__(self, point: Point) -> None:
         self._state = CELL_STATE.NONE
         self._extraInfo = None
+        self._extraInfo2 = None
         self._point = point
         self._manageList: list[Point] = None
         self._stateTrigger: list[StateTrigger] = []
@@ -101,12 +102,17 @@ class Cell:
         pass
 
     def getState(self):
-        return self._state, self._extraInfo
+        return self._state, self._extraInfo, self._extraInfo2
 
     def setStateWithManageList(
-        self, state: CELL_STATE, newManageList: list[Point] = None, extraInfo=None
+        self,
+        state: CELL_STATE,
+        newManageList: list[Point] = None,
+        extraInfo=None,
+        extraInfo2=None,
     ):
         self._extraInfo = extraInfo
+        self._extraInfo2 = extraInfo2
         if self._manageList != None:
             self._manageList.remove(self._point)
         if newManageList != None:
@@ -114,11 +120,10 @@ class Cell:
         self._manageList = newManageList
         self._state = state
 
-    def setStateWithTrigger(
-        self, state: CELL_STATE, extraInfo=None, beforeUpdateCell=None
-    ):
+    def setStateWithTrigger(self, state: CELL_STATE, extraInfo=None, extraInfo2=None):
         self.trigger(state)
         self._extraInfo = extraInfo
+        self._extraInfo2 = extraInfo2
         pass
 
     def trigger(self, state):

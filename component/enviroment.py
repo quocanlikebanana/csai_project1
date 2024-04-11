@@ -30,9 +30,6 @@ class Enviroment:
         self.borderPoints: list[Point] = []
         self._updatePolyPoints()
         self._updateBorderPoints()
-        self.validateEnv()
-        ## ====
-        ## After this, the enviroment is valid
         self.moving = False
         for p in self.polygons:
             if self.polygons[p].orbit != None:
@@ -51,6 +48,11 @@ class Enviroment:
         self._stateTrigger = None
         self._frontier = []
         self._explored = []
+        self.agentPoint = None
+        # vẫn còn hơi conflict chỗ này do đang update point (trong dstar) thì
+        # đa giác lại di chuyển (xài doneCompute như semaphore)
+        self.allowMove = True
+        self.validateEnv()
 
     # these points are not managed by env or changeable
     def _updateMap(self):
@@ -64,7 +66,7 @@ class Enviroment:
             self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.BLOCKED)
         for id in self.polygons:
             for p in self.polygons[id].points:
-                self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.BLOCKED, extraInfo=id)
+                self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.BLOCKED, id, False)
         pass
 
     def _updatePolyPoints(self):
@@ -98,7 +100,8 @@ class Enviroment:
         return False
 
     def checkNotOnPolygon(self, point: Point) -> bool:
-        if point in self.polyPoints:
+        stateInfo = self.map[point.x][point.y].getState()
+        if stateInfo[0] == CELL_STATE.BLOCKED and stateInfo[2] == False:
             return False
         return True
 
@@ -123,13 +126,16 @@ class Enviroment:
                     for p in self.polygons[id].points:
                         self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.NONE)
                     self.polygons[id].move(pmv)
+                    invisible = False
+                    if self.agentPoint in self.polygons[id].points:
+                        invisible = True
                     for p in self.polygons[id].points:
                         self.map[p.x][p.y].setStateWithTrigger(
-                            CELL_STATE.BLOCKED, extraInfo=id
+                            CELL_STATE.BLOCKED, id, invisible
                         )
                     if self.onPolygonMoveTrigger != None:
                         afterMoving = self.polygons[id].points.copy()
-                        changedPoints.extend(list(set(beforeMoving + afterMoving)))
+                        changedPoints.extend(list(set(beforeMoving) ^ set(afterMoving)))
             self._updatePolyPoints()
             self.onPolygonMoveTrigger(changedPoints)
 
@@ -182,6 +188,12 @@ class Enviroment:
         self.donePoints.clear()
         pass
 
+    def clearClosePoints(self):
+        for p in self.closedPoints:
+            self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.NONE)
+        self.closedPoints.clear()
+        pass
+
     def appendClosePoint(self, p: Point):
         if self.map[p.x][p.y].getState()[0] != CELL_STATE.CLOSE:
             self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.CLOSE)
@@ -199,10 +211,6 @@ class Enviroment:
             self.map[p.x][p.y].setStateWithTrigger(CELL_STATE.DONE)
             self.donePoints.append(p)
         pass
-
-    def overlayCharOnMap(self, p: Point, str):
-        self.charOverlay.append((p, str))
-        return
 
     def validatePositionByMap(self, pos: Point):
         if (
