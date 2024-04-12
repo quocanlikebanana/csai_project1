@@ -2,10 +2,20 @@ from component.point import Point
 from component.polygon import Polygon
 
 #input = InputReader('input.txt')
-#access to input. width, height, start_point, end_point, number_of_polygons, polygons
+#access to input. width, height, start_point, end_point, number_of_polygons, polygons, meetings_point
 class MapReader:
     def __init__(self, file_path) -> None:
-        f = open(file_path,'r')
+        self.file_path = file_path
+        self.width = 0
+        self.height =0 
+        self.start_point:Point = None
+        self.end_point: Point = None
+        self.number_of_polygons =0
+        self.polygons:list[Polygon] = []
+        self.meeting_points :list[Point] = []
+
+    def run(self):
+        f = open(self.file_path,'r')
         file_content  = f.read()
         lines = file_content.split('\n')
 
@@ -19,7 +29,6 @@ class MapReader:
         self.start_point = Point(tmp[0], tmp[1])
         self.end_point = Point(tmp[2], tmp[3])
 
-        self.meeting_points :list[Point] = []
         k = 4
         while k<len(tmp):
             self.meeting_points.append(Point(tmp[k], tmp[k+1]))
@@ -38,7 +47,8 @@ class MapReader:
             while j<len(tmp):
                 list_point.append(Point(tmp[j], tmp[j+1]))
                 j = j+2
-            self.polygons.append(Polygon(list_point))
+            self.polygons.append(Polygon(list_point))        
+
 
     #for testing
     def output(self):
@@ -47,4 +57,3 @@ class MapReader:
         print(self.number_of_polygons, '\n')
         for i in range(self.number_of_polygons):
             print(self.polygons[i], '\n')
-
