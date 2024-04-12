@@ -14,11 +14,17 @@ class InputReader:
         self.width = tmp[0]
         self.height = tmp[1]
 
-        #start and end points
+        #start, end and meeting points
         tmp = lines[1].split(',')
         self.start_point = Point(tmp[0], tmp[1])
         self.end_point = Point(tmp[2], tmp[3])
 
+        self.meeting_points :list[Point] = []
+        k = 4
+        while k<len(tmp):
+            self.meeting_points.append(Point(tmp[k], tmp[k+1]))
+            k = k+2
+            
         #number of polygons
         self.number_of_polygons = int(lines[2])
 
