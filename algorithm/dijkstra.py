@@ -1,16 +1,17 @@
-from component.enviroment import Enviroment
+from component.environment import Environment
 from component.map import CELL_STATE
 from component.point import Point
 import heapq
 
 
 class Dijkstra:
-    def __init__(self, env: Enviroment) -> None:
+    def __init__(self, env: Environment) -> None:
         self.env = env
         self.open: list[(float, Point)] = [(0, env.startPoint)]
         self.shortest_path: {Point, list[Point]} = {env.startPoint: [env.startPoint]}
         self.distances: {Point, float} = {env.startPoint: 0}
         self.searching = True
+        self.cost = float("inf")
 
     def searchOnce(self):
         if self.searching == False:
@@ -25,6 +26,8 @@ class Dijkstra:
             if current_point == self.env.endPoint:
                 self.env.donePoints = self.shortest_path[self.env.endPoint]
                 self.searching = False
+                self.cost = current_distance
+                print(f"Cost: {self.cost}")
 
             for i in range(-1, 2):
                 for j in range(-1, 2):

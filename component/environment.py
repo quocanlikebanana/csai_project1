@@ -6,7 +6,7 @@ from component.polygon import Polygon
 CHECK_POLYGON_MOVE = False
 
 
-class Enviroment:
+class Environment:
     def __init__(
         self,
         ncol,

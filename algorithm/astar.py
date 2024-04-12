@@ -2,22 +2,22 @@ from enum import Enum
 import math
 import copy
 from algorithm.priorityqueue import PriorityQueue
-from component.enviroment import Enviroment
+from component.environment import Environment
 from component.point import Point
 
 
 BLOCK_SIZE = 10
-CROSS_COST = 1.5
+CROSS_COST = 2**0.5
 STRAIGHT_COST = 1
 directions = [
-            (1, 0),
-            (-1, 0),
-            (0, 1),
-            (0, -1),
-            (1, 1),
-            (-1, -1),
-            (1, -1),
-            (-1, 1),
+    (1, 0),
+    (-1, 0),
+    (0, 1),
+    (0, -1),
+    (1, 1),
+    (-1, -1),
+    (1, -1),
+    (-1, 1),
 ]
 
 
@@ -61,7 +61,7 @@ class AS_Node:
 
 
 class AS_Map:
-    def __init__(self, env: Enviroment):
+    def __init__(self, env: Environment):
         self.env = env
         self.nodes = []
         for x in range(env.ncol):
@@ -104,12 +104,12 @@ class AS_Map:
                         ):
                             neighbour.g = node.g + CROSS_COST
                             neighbours.append(neighbour)
-                
+
         return neighbours
 
 
 class AStar:
-    def __init__(self, map: AS_Map, heuristicFunction) -> None:
+    def __init__(self, map: AS_Map, heuristicFunction=EuclideanHeuristic) -> None:
         self.startNode = map.nodes[map.env.startPoint.x][map.env.startPoint.y]
         self.targetNode = map.nodes[map.env.endPoint.x][map.env.endPoint.y]
         self.startNode.status = NodeStatus.START
@@ -134,7 +134,7 @@ class AStar:
                 self.map.env.appendClosePoint(Point(currentNode.x, currentNode.y))
             if currentNode == self.targetNode:
                 self.searching = False
-                print("Cost: ",currentNode.f)
+                print("Cost: ", currentNode.f)
                 currentNode.status = NodeStatus.END
                 while currentNode.parent != self.startNode:
                     currentNode.parent.status = NodeStatus.DONE
@@ -154,7 +154,7 @@ class AStar:
                         realNode.h = node.h
                         realNode.f = node.f
                         realNode.parent = currentNode
-                        if realNode.status != NodeStatus.OPEN :
+                        if realNode.status != NodeStatus.OPEN:
                             realNode.status = NodeStatus.OPEN
                             self.map.env.appendOpenPoint(Point(node.x, node.y))
                             self.open.insert(realNode)

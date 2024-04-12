@@ -1,11 +1,11 @@
-from component.enviroment import Enviroment
+from component.environment import Environment
 from component.map import CELL_STATE
 from component.point import Point
 from queue import Queue
 
 
 class BFS:
-    def __init__(self, env: Enviroment) -> None:
+    def __init__(self, env: Environment) -> None:
         self.env = env
         self.open: Queue[list[Point]] = Queue()
         self.open.put([env.startPoint])

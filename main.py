@@ -3,7 +3,7 @@ from algorithm.bfs import *
 from algorithm.dijkstra import Dijkstra
 from algorithm.dfs import DFS
 from algorithm.dstar import DStar
-from component.enviroment import Enviroment
+from component.environment import Environment
 from component.moving import VeloOrbit
 from component.point import Point
 from component.polygon import Polygon
@@ -37,7 +37,7 @@ def test():
             VeloOrbit([(1, 1, 1), (-1, -1, 1)]),
         ),
     ]
-    env = Enviroment(30, 30, Point(1, 1), Point(28, 28), [], pl)
+    env = Environment(30, 30, Point(1, 1), Point(28, 28), [], pl)
 
     # bfs = BFS(env)
     # astar = AStar(AS_Map(env), EuclideanHeuristic)
@@ -45,8 +45,11 @@ def test():
     # dij = Dijkstra(env)
     dstar = DStar(env)
     # main = Main(env, dfs.searchOnce)
+
     main = Main(env, dstar.searchOnce)
+
     # main = Main(env)
+
     main.run()
 
 

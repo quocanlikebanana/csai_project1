@@ -5,7 +5,7 @@
             "name": "Python Debugger: Module",
             "type": "debugpy",
             "request": "launch",
-            "module": "main"
+            "module": "input.input"
         },
         {
             "name": "Python Debugger: Python File",

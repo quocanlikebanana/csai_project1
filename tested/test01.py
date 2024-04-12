@@ -1,6 +1,6 @@
 from algorithm.astar import *
 from algorithm.bfs import *
-from component.enviroment import Enviroment
+from component.environment import Environment
 from component.moving import ConstantOrbit, LinearOrbit, RatioOrbit
 from component.point import Point
 from component.polygon import Polygon
@@ -15,7 +15,7 @@ def test2():
         Polygon([Point(4, 10), Point(10, 20), Point(26, 20), Point(26, 10)]),
         Polygon([Point(2, 20), Point(8, 20), Point(8, 26), Point(2, 26)]),
     ]
-    env = Enviroment(30, 30, Point(1, 1), Point(28, 28), [], pl)
+    env = Environment(30, 30, Point(1, 1), Point(28, 28), [], pl)
 
     # BFS
     bfs = BFS(env)

@@ -3,7 +3,7 @@ import sys
 import math
 import os
 
-from component.enviroment import Enviroment
+from component.environment import Environment
 from component.point import Point
 from graphics.color import BASE_COLOR
 
@@ -11,7 +11,7 @@ MAX_FPS = 100
 
 
 class Graphics:
-    def __init__(self, env: Enviroment, drawAll) -> None:
+    def __init__(self, env: Environment, drawAll) -> None:
         self.env = env
         self.MAR_X = 30
         self.MAR_Y = 30
@@ -71,7 +71,8 @@ class Graphics:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
+                    return
+                    # sys.exit()
                 if event.type == pygame.VIDEORESIZE:
                     self.updateBlockSize()
                 if event.type == polygon_move_event and self.env.allowMove == True:

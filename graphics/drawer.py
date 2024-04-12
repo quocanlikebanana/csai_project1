@@ -2,11 +2,11 @@ from component.map import CELL_STATE, Cell
 from component.point import Point
 from graphics.graphics import Graphics  # Because name conflict
 from graphics.color import *
-from component.enviroment import Enviroment
+from component.environment import Environment
 
 
 class Drawer:
-    def __init__(self, env: Enviroment) -> None:
+    def __init__(self, env: Environment) -> None:
         self.env = env
         self.polycolors = genRandomDistinctColor(len(self.env.polygons))
         # self.graphics = Graphics(env, self.drawAll)

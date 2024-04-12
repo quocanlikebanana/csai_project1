@@ -1,6 +1,6 @@
 import math
 from algorithm.algorithm import Algorithm
-from component.enviroment import Enviroment
+from component.environment import Environment
 from component.map import CELL_STATE, DIRECTION, Cell, stateTriggersFactory
 from component.point import Point
 
@@ -99,7 +99,7 @@ def ManhattanHeuristic(curNode: DS_Node, target: Point):
 
 
 class DStar(Algorithm):
-    def __init__(self, env: Enviroment, hFunc=EuclideanHeuristic) -> None:
+    def __init__(self, env: Environment, hFunc=EuclideanHeuristic) -> None:
         super().__init__(env)
         self.env = env
         self.done = False

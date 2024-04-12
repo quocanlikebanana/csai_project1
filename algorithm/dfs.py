@@ -1,5 +1,5 @@
 from algorithm.algorithm import Algorithm
-from component.enviroment import Enviroment
+from component.environment import Environment
 from component.map import DIRECTION, stateTriggersFactory
 from component.point import Point
 
@@ -31,7 +31,7 @@ class DFS_Node:
 
 
 class DFS(Algorithm):
-    def __init__(self, env: Enviroment) -> None:
+    def __init__(self, env: Environment) -> None:
         super().__init__(env)
         self.env = env
         self.MAX_LIM = 1000
