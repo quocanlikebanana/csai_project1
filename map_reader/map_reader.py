@@ -3,7 +3,7 @@ from component.polygon import Polygon
 
 #input = InputReader('input.txt')
 #access to input. width, height, start_point, end_point, number_of_polygons, polygons
-class InputReader:
+class MapReader:
     def __init__(self, file_path) -> None:
         f = open(file_path,'r')
         file_content  = f.read()
