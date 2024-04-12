@@ -10,11 +10,12 @@ class Drawer:
         self.env = env
         self.polycolors = genRandomDistinctColor(len(self.env.polygons))
         # self.graphics = Graphics(env, self.drawAll)
-        self.graphics = Graphics(env, self.drawAllByMap)
+        self.graphics = Graphics(env, self.drawAll)
 
     def run(self):
         self.graphics.run()
 
+    # Old draw function
     def drawAll(self):
         # Order decides
         self.drawMapBorder()
@@ -24,21 +25,24 @@ class Drawer:
         self.drawClosed()
         self.drawDone()
         self.drawStartEndPoint()
+        self.drawAgent(self.env.agentPoint)
         self.graphics.renderGrid(BASE_COLOR["BLACK"])  # Draw this last to avoid overlap
-        # Có thể cải tiến render đồng bộ
 
     def drawAllByMap(self):
         for x in range(self.env.ncol):
             for y in range(self.env.nrow):
                 self.switchPixelDraw(self.env.map[x][y])
-        self.drawOverlay()
-        self.graphics.renderGrid(BASE_COLOR["BLACK"])  # Draw this last to avoid overlap
+        self.drawOverlayInit()
 
-    def drawOverlay(self):
+    def drawOverlayInit(self):
         self.drawStartPixel(self.env.startPoint)
         self.drawEndPixel(self.env.endPoint)
         for p in self.env.pickupPoints:
             self.drawPickupPixel(p)
+        for s in self.env.charOverlay:
+            self.graphics.renderSymbolPixel(s[0], s[1])
+        self.graphics.renderGrid(BASE_COLOR["BLACK"])  # Draw this last to avoid overlap
+        self.drawAgent(self.env.agentPoint)
         pass
 
     def switchPixelDraw(self, cell: Cell):
@@ -89,6 +93,18 @@ class Drawer:
         self.graphics.renderSymbolPixel(point, "+")
         pass
 
+    def drawAgent(self, point: Point):
+        if point == None:
+            return
+        self.graphics.renderFilledPixel(point, BASE_COLOR["GREEN"])
+        self.graphics.renderSymbolPixel(point, "A")
+        pass
+
+    # Old
+    # Old
+    # Old
+    # Old
+    # Old
     # Old
 
     def drawMapBorder(self):

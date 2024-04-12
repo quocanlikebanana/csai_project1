@@ -1,7 +1,8 @@
 from algorithm.algorithm import Algorithm
 from component.enviroment import Enviroment
-from component.map import DIRECTION
+from component.map import DIRECTION, stateTriggersFactory
 from component.point import Point
+
 
 # Change IDS to DFS
 IDS_MODE = False
@@ -13,6 +14,7 @@ class DFS_Node:
         self.state = state
         self.cost = cost
         self.depth = depth
+        self.blocked = False
 
     def isSameState(self, node):
         if self.state == node.state:
@@ -38,8 +40,27 @@ class DFS(Algorithm):
         self.cost = None
         self.found = False
         self.step = 1
+        self.subMap_Explored = [
+            [[] for _ in range(self.env.nrow)] for _ in range(self.env.ncol)
+        ]
         self.frontier: list[DFS_Node] = [DFS_Node(None, self.env.startPoint, 0, 0)]
         self.env.appendOpenPoint(self.env.startPoint)
+        self.env.injectTrigger(
+            stateTriggersFactory(
+                self._openToBlock, self._closeToBlock, self._blockToNone
+            )
+        )
+
+    def _openToBlock(self, p: Point):
+        self.frontier = [node for node in self.frontier if not node.state == p]
+        pass
+
+    def _closeToBlock(self, p: Point):
+
+        pass
+
+    def _blockToNone(self, p: Point):
+        pass
 
     def isDone(self):
         return self.cost != None
@@ -48,13 +69,13 @@ class DFS(Algorithm):
         self.env.clearFinding()
         self.curLim += self.step
         self.frontier: list[DFS_Node] = [DFS_Node(None, self.env.startPoint, 0, 0)]
-        self.env.appendClosePoint(self.env.startPoint)
+        self.env.appendOpenPoint(self.env.startPoint)
 
     def searchOnce(self):
         if self.isDone() == True:
             return
         if self.curLim == self.MAX_LIM:
-            raise ValueError("ids max limit, ids not found")
+            raise ValueError("depth max limit, not found")
         if len(self.frontier) == 0:
             self.resetDFS()
         curNode = self.frontier.pop(0)
@@ -73,3 +94,4 @@ class DFS(Algorithm):
                         self.frontier.insert(0, child)  # dfs
                         self.env.appendOpenPoint(child.state)
             self.env.appendClosePoint(curNode.state)
+            self.subMap_Explored[curNode.state.x][curNode.state.y].append(curNode)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Fri Apr 12 08:14:31 2024    test_stats
 
          6669220 function calls (6025535 primitive calls) in 7.261 seconds
@@ -62,5 +63,75 @@ Fri Apr 12 08:14:31 2024    test_stats
       126    0.003    0.000    0.153    0.001 /home/admin1/Desktop/HCMUS/csai_project1/component/enviroment.py:137(<listcomp>)
       278    0.003    0.000    0.003    0.000 /home/admin1/Desktop/HCMUS/csai_project1/algorithm/priorityqueue.py:17(delete)
       246    0.002    0.000    0.019    0.000 /home/admin1/Desktop/HCMUS/csai_project1/graphics/drawer.py:37(drawOverlay)
+=======
+Thu Apr 11 09:28:56 2024    test_stats
+
+         12010195 function calls (12007556 primitive calls) in 35.969 seconds
+
+   Ordered by: internal time
+   List reduced from 302 to 60 due to restriction <0.2>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      858    5.642    0.007    8.448    0.010 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:80(renderGrid)
+   772200    4.720    0.000    9.364    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:44(switchPixelDraw)
+   245006    3.372    0.000    4.755    0.000 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:99(checkNotOnPolygon)
+    15625    3.052    0.000   10.392    0.001 D:\programin\codes\visual code\python_ai\project1\algorithm\reastar.py:118(getAdjacent)
+      858    1.972    0.002   17.769    0.021 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:30(drawAllByMap)
+  1066494    1.753    0.000    1.753    0.000 {built-in method pygame.draw.rect}
+   294294    1.599    0.000    2.845    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:89(renderFilledPixel)
+  1358503    1.369    0.000    1.369    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:12(__eq__)
+   911222    1.154    0.000    1.154    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:6(__init__)
+   291720    1.147    0.000    4.038    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:70(drawBlockPixel)
+   351572    1.082    0.000    1.257    0.000 c:\Python312\Lib\enum.py:197(__get__)
+  1068210    1.014    0.000    1.014    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:36(getScreenPosition)
+   2402/3    0.859    0.000    0.000    0.000 {method 'acquire' of '_thread.lock' objects}
+  2136421    0.690    0.000    0.690    0.000 {built-in method math.ceil}
+      600    0.653    0.001   16.743    0.028 c:\Python312\Lib\threading.py:323(wait)
+      314    0.632    0.002    0.889    0.003 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:22(points)
+        1    0.480    0.480    0.490    0.490 {built-in method pygame.base.init}
+  1063921    0.471    0.000    0.471    0.000 D:\programin\codes\visual code\python_ai\project1\component\map.py:83(getState)
+   125000    0.442    0.000    0.620    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:26(relative)
+    58137    0.387    0.000    0.760    0.000 D:\programin\codes\visual code\python_ai\project1\component\map.py:28(isCrossDir)
+   304752    0.259    0.000    0.351    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:23(__hash__)
+    14816    0.245    0.000   10.310    0.001 D:\programin\codes\visual code\python_ai\project1\algorithm\reastar.py:170(updateNode)
+      858    0.234    0.000    0.234    0.000 {built-in method pygame.display.update}
+    13787    0.216    0.000    0.278    0.000 D:\programin\codes\visual code\python_ai\project1\component\map.py:104(trigger)
+  547/317    0.203    0.000   72.740    0.229 c:\Python312\Lib\queue.py:154(get)
+   351572    0.176    0.000    0.176    0.000 c:\Python312\Lib\enum.py:1279(value)
+      858    0.171    0.000    0.171    0.000 {built-in method pygame.event.get}
+   125072    0.156    0.000    0.156    0.000 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:88(checkInBorder)
+     2885    0.148    0.000    0.246    0.000 D:\programin\codes\visual code\python_ai\project1\algorithm\reastar.py:58(update)
+   332898    0.140    0.000    0.140    0.000 D:\programin\codes\visual code\python_ai\project1\component\map.py:67(point)
+      858    0.130    0.000    0.130    0.000 {method 'fill' of 'pygame.surface.Surface' objects}
+   140625    0.115    0.000    0.115    0.000 c:\Python312\Lib\enum.py:807(<genexpr>)
+   304752    0.092    0.000    0.092    0.000 {built-in method builtins.hash}
+       62    0.084    0.001    0.171    0.003 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:35(_updateInternalPoints)
+   205422    0.078    0.000    0.078    0.000 {built-in method builtins.len}
+      229    0.076    0.000   17.719    0.077 c:\Python312\Lib\threading.py:637(wait)
+   145813    0.071    0.000    0.071    0.000 {method 'append' of 'list' objects}
+       31    0.068    0.002    0.326    0.011 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:69(_updatePolyPoints)
+      3/1    0.058    0.019   35.914   35.914 {built-in method builtins.exec}
+    38416    0.056    0.000    0.096    0.000 D:\programin\codes\visual code\python_ai\project1\algorithm\reastar.py:19(getKeys)
+       33    0.048    0.001    0.067    0.002 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:73(_updateBlockPoints)
+    13787    0.045    0.000    0.323    0.000 D:\programin\codes\visual code\python_ai\project1\component\map.py:97(setStateWithTrigger)
+    78167    0.045    0.000    0.046    0.000 {built-in method builtins.min}
+    40320    0.042    0.000    0.045    0.000 D:\programin\codes\visual code\python_ai\project1\component\map.py:43(checkTriggerToCall)
+     2990    0.042    0.000    0.058    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:82(_update)
+        1    0.039    0.039    0.040    0.040 {built-in method pygame.display.set_mode}
+     1716    0.039    0.000    0.039    0.000 {method 'render' of 'pygame.font.Font' objects}
+       30    0.031    0.001    5.018    0.167 D:\programin\codes\visual code\python_ai\project1\component\enviroment.py:110(moveAllPolygons)
+       60    0.031    0.001    4.211    0.070 D:\programin\codes\visual code\python_ai\project1\algorithm\reastar.py:181(onPolygonMove)
+     1716    0.025    0.000    0.025    0.000 {built-in method pygame.transform.smoothscale}
+    15625    0.023    0.000    0.023    0.000 c:\Python312\Lib\enum.py:803(__iter__)
+     2990    0.022    0.000    0.081    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:37(__init__)
+     1716    0.020    0.000    0.100    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\graphics.py:96(renderSymbolPixel)
+     5092    0.016    0.000    0.019    0.000 D:\programin\codes\visual code\python_ai\project1\component\point.py:67(X_intersect_Y)
+      858    0.012    0.000    0.088    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:56(drawStartPixel)
+      858    0.010    0.000    0.148    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:37(drawOverlay)
+       62    0.010    0.000    0.064    0.001 D:\programin\codes\visual code\python_ai\project1\component\polygon.py:28(_updateEdges)
+    15686    0.009    0.000    0.009    0.000 D:\programin\codes\visual code\python_ai\project1\algorithm\reastar.py:27(isConsistent)
+      858    0.009    0.000    0.050    0.000 D:\programin\codes\visual code\python_ai\project1\graphics\drawer.py:61(drawEndPixel)
+     2949    0.008    0.000    0.009    0.000 {method 'sort' of 'list' objects}
+>>>>>>> origin/an_dev_3
 
 

@@ -2,6 +2,7 @@ from algorithm.astar import *
 from algorithm.bfs import *
 from algorithm.dijkstra import Dijkstra
 from algorithm.dfs import DFS
+from algorithm.dstar import DStar
 from component.enviroment import Enviroment
 from component.moving import VeloOrbit
 from component.point import Point
@@ -21,12 +22,15 @@ class Main:
 
 def test():
     pl = [
-        Polygon([Point(2, 2), Point(4, 2), Point(4, 4), Point(2, 4)]),
+        Polygon(
+            [Point(2, 2), Point(4, 2), Point(4, 4), Point(2, 4)],
+            VeloOrbit([(-1, 0, 1), (1, 0, 1)]),
+        ),
         Polygon([Point(12, 2), Point(14, 2), Point(14, 4), Point(12, 4)]),
         Polygon([Point(22, 2), Point(24, 2), Point(24, 4), Point(22, 4)]),
         Polygon(
             [Point(4, 10), Point(10, 20), Point(26, 20), Point(26, 10)],
-            VeloOrbit([(1, 2, 2), (-1, -2, 2)]),
+            VeloOrbit([(-1, 2, 2), (1, -2, 2)]),
         ),
         Polygon(
             [Point(2, 20), Point(8, 20), Point(8, 26), Point(2, 26)],
@@ -35,12 +39,14 @@ def test():
     ]
     env = Enviroment(30, 30, Point(1, 1), Point(28, 28), [], pl)
 
-    # BFS
-    bfs = BFS(env)
-    astar = AStar(AS_Map(env), EuclideanHeuristic)
-    dfs = DFS(env)
-    dij = Dijkstra(env)
-    main = Main(env, dfs.searchOnce)
+    # bfs = BFS(env)
+    # astar = AStar(AS_Map(env), EuclideanHeuristic)
+    # dfs = DFS(env)
+    # dij = Dijkstra(env)
+    dstar = DStar(env)
+    # main = Main(env, dfs.searchOnce)
+    main = Main(env, dstar.searchOnce)
+    # main = Main(env)
     main.run()
 
 
