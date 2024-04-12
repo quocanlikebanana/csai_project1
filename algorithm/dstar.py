@@ -56,9 +56,14 @@ class DS_Frontier:
             return [math.inf, math.inf]
         return self._list[0].getKeys()
 
-    def update(self, node: DS_Node):
-        if node in self._list:
-            self._list.remove(node)
+    def contain(self, node: DS_Node):
+        return node in self._list
+
+    def remove(self, node: DS_Node):
+        self._list.remove(node)
+        pass
+
+    def insert(self, node: DS_Node):
         j = 0
         l = len(self._list)
         nodeKeys = node.getKeys()
@@ -76,7 +81,7 @@ class DS_Frontier:
         return self._list.pop(0)
 
 
-DIS_COST = 1
+DIS_COST = 10
 
 
 def EuclideanHeuristic(curNode: DS_Node, target: Point):
@@ -103,7 +108,6 @@ class DStar(Algorithm):
         super().__init__(env)
         self.env = env
         self.done = False
-        self.doneCompute = False
         self.hFunc = hFunc
         self.agentNode: DS_Node = None
         self.map = [
@@ -128,7 +132,7 @@ class DStar(Algorithm):
                 checkDir = self.env.checkNotOnPolygon(test)
                 checkSelf = self.env.checkNotOnPolygon(node.state)
                 if checkDir and checkSelf:
-                    cost = 1 if DIRECTION.isCrossDir(dir) == False else 1.4
+                    cost = 10 if DIRECTION.isCrossDir(dir) == False else 14
                 result.append(
                     [self.map[test.x][test.y], cost, DIRECTION.getSymbol(dir)]
                 )
@@ -138,7 +142,7 @@ class DStar(Algorithm):
         self.goalNode = self.map[self.env.endPoint.x][self.env.endPoint.y]
         self.goalNode.rhs = 0
         self.frontier = DS_Frontier()
-        self.frontier.update(self.goalNode)
+        self.frontier.insert(self.goalNode)
         self.agentNode = self.map[self.env.startPoint.x][self.env.startPoint.y]
         self.env.agentPoint = self.agentNode.state
 
@@ -147,13 +151,11 @@ class DStar(Algorithm):
 
     def computePath(self):
         while True:
-            # if self.frontier.isEmpty():
-            #     printMap(self.map)
-            #     print("============")
-            #     printEnvMap(self.env.map)
+            frontierTopkey = self.frontier.topKey()
+            agentKey = self.agentNode.getKeys()
             if not (
                 self.agentNode.isConsistent() == False
-                or keyCompare(self.frontier.topKey(), self.agentNode.getKeys()) == -1
+                or keyCompare(frontierTopkey, agentKey) == -1
             ):
                 # printMap(self.map)
                 # print("============")
@@ -169,9 +171,8 @@ class DStar(Algorithm):
             for p in pre:
                 self.updateNode(p[0])
             pass
-        self.doneCompute = True
-        # print("=" * 50)
-        # printMapDir(self.map)
+        print("=" * 50)
+        printMapDir(self.map)
         # print("*" * 10)
         # printEnvMap(self.env.map)
         # print("=" * 50)
@@ -196,15 +197,18 @@ class DStar(Algorithm):
                 if minrhs != math.inf:
                     node.successorGradient = sucGrad
                     node.charSymbol = charSym
+            # if node.isConsistent() == False:
+            #     self.frontier.update(node)
+            # Only remove when consistent => false, will cause trash nodes to be on top
+            if self.frontier.contain(node):
+                self.frontier.remove(node)
             if node.isConsistent() == False:
-                self.frontier.update(node)
+                self.frontier.insert(node)
         pass
 
     def onPolygonMove(self, points: list[Point]):
-        # vẫn còn hơi conflict chỗ này do đang update point thì đa giác lại di chuyển (xài doneCompute như semaphore)
-        if self.doneCompute == True:
-            self.affectedPoints = points
-        pass
+        # vẫn còn hơi conflict chỗ này do đang update point thì đa giác lại di chuyển
+        self.affectedPoints = points
 
     def searchOnce(self):
         if self.done == True:
@@ -215,18 +219,19 @@ class DStar(Algorithm):
             for p in self.affectedPoints:
                 self.updateNode(self.map[p.x][p.y])
             self.done = False
-            self.doneCompute = False
             self.computePath()
             self.findPath()
             self.affectedPoints.clear()
             self.env.allowMove = True
         if self.agentNode.state != self.goalNode.state:
             if self.agentNode.g == math.inf:
-                raise ValueError("dstar not found")
-            # If path still found
-            self.env.donePoints.append(self.agentNode.state)
-            self.agentNode = self.agentNode.successorGradient
-            self.env.agentPoint = self.agentNode.state
+                # raise ValueError("dstar not found")
+                pass
+            else:
+                # If path still found
+                self.env.donePoints.append(self.agentNode.state)
+                self.agentNode = self.agentNode.successorGradient
+                self.env.agentPoint = self.agentNode.state
         else:
             self.done = True
         pass

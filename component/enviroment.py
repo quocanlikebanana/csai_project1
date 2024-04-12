@@ -137,7 +137,8 @@ class Enviroment:
                         afterMoving = self.polygons[id].points.copy()
                         changedPoints.extend(list(set(beforeMoving) ^ set(afterMoving)))
             self._updatePolyPoints()
-            self.onPolygonMoveTrigger(changedPoints)
+            if self.onPolygonMoveTrigger != None:
+                self.onPolygonMoveTrigger(changedPoints)
 
     # vertices might not from polygon, it could be pesudo ones
     def validatePolygonVertices(self, vertices: list[Point], polygon: Polygon) -> bool:
