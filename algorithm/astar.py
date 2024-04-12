@@ -7,8 +7,8 @@ from component.point import Point
 
 
 BLOCK_SIZE = 10
-CROSS_COST = 15
-STRAIGHT_COST = 10
+CROSS_COST = 1.5
+STRAIGHT_COST = 1
 directions = [
             (1, 0),
             (-1, 0),
@@ -134,7 +134,7 @@ class AStar:
                 self.map.env.appendClosePoint(Point(currentNode.x, currentNode.y))
             if currentNode == self.targetNode:
                 self.searching = False
-                # print(currentNode.f)
+                print("Cost: ",currentNode.f)
                 currentNode.status = NodeStatus.END
                 while currentNode.parent != self.startNode:
                     currentNode.parent.status = NodeStatus.DONE

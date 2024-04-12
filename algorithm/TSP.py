@@ -8,8 +8,8 @@ from component.point import Point
 
 
 BLOCK_SIZE = 10
-CROSS_COST = 15
-STRAIGHT_COST = 10
+CROSS_COST = 1.5
+STRAIGHT_COST = 1
 directions = [
             (1, 0),
             (-1, 0),
@@ -216,18 +216,19 @@ class TSP:
         self.endIndex = len(self.listV) 
         self.minCost,self.path =   self.tsp(self.c,0)
         self.currentVIndex = 0
-        print(self.minCost)
     def searchOnce(self):
         if self.searching:
             time.sleep(0.3)
             if self.currentVIndex >= len(self.listV) - 2 :
-                print(self.path)
+                print("Path:",self.path)
+                print("Cost: ", self.minCost)
                 self.searching = False
             for edge in self.Edges:
                 if edge.HasVertex([self.listV[self.path[self.currentVIndex]],self.listV[self.path[self.currentVIndex + 1]]]):
                     edge.MakeDone(self.map)
             self.currentVIndex += 1
         else:
+            
             return True
         
     def tsp(self,c,v):
