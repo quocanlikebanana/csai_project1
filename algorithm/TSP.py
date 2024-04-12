@@ -8,7 +8,7 @@ from component.point import Point
 
 
 BLOCK_SIZE = 10
-CROSS_COST = 1.5
+CROSS_COST = 2**0.5
 STRAIGHT_COST = 1
 directions = [
     (1, 0),
