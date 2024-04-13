@@ -85,6 +85,7 @@ class DFS(Algorithm):
                 self.env.appendDonePoint(curNode.state)
                 self.cost += curNode.cost
                 curNode = curNode.parent
+            print(f"Cost: {self.cost}")
         else:
             if IDS_MODE == False or curNode.depth != self.curLim:
                 for dir in DIRECTION:

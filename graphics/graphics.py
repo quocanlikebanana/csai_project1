@@ -34,8 +34,11 @@ class Graphics:
         self.blocksize_y = (windowHeight - self.MAR_Y * 2) / self.env.nrow
 
     def getScreenPosition(self, point: Point):
+        windowWidth, windowHeight = pygame.display.get_surface().get_size()
         left = self.MAR_X + self.blocksize_x * point.x
-        top = self.MAR_Y + self.blocksize_y * point.y
+        top = (
+            windowHeight - self.blocksize_y * point.y - self.blocksize_y
+        ) - self.MAR_Y
         return left, top
 
     def onEveryFrameDrawn(self):
