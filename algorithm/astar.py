@@ -1,13 +1,24 @@
 from enum import Enum
 import math
+import copy
 from algorithm.priorityqueue import PriorityQueue
-from component.enviroment import Enviroment
+from component.environment import Environment
 from component.point import Point
 
 
 BLOCK_SIZE = 10
-CROSS_COST = 14
-STRAIGHT_COST = 10
+CROSS_COST = 2**0.5
+STRAIGHT_COST = 1
+directions = [
+    (1, 0),
+    (-1, 0),
+    (0, 1),
+    (0, -1),
+    (1, 1),
+    (-1, -1),
+    (1, -1),
+    (-1, 1),
+]
 
 
 def EuclideanHeuristic(curNode, targetNode):
@@ -50,7 +61,7 @@ class AS_Node:
 
 
 class AS_Map:
-    def __init__(self, env: Enviroment):
+    def __init__(self, env: Environment):
         self.env = env
         self.nodes = []
         for x in range(env.ncol):
@@ -69,26 +80,16 @@ class AS_Map:
             print("")
 
     def GetNeighbours(self, node):
-        directions = [
-            (1, 0),
-            (-1, 0),
-            (0, 1),
-            (0, -1),
-            (1, 1),
-            (-1, -1),
-            (1, -1),
-            (-1, 1),
-        ]
         neighbours = []
         curX = node.x
         curY = node.y
         for i, (dx, dy) in enumerate(directions):
             nx, ny = curX + dx, curY + dy
             if 0 <= nx < len(self.nodes) and 0 <= ny < len(self.nodes[0]):
-                neighbour = self.nodes[nx][ny]
+                neighbour = copy.deepcopy(self.nodes[nx][ny])
                 if (
                     neighbour.status != NodeStatus.BLOCKED
-                    and neighbour.status != NodeStatus.OPEN
+                    # and neighbour.status != NodeStatus.OPEN
                     and neighbour.status != NodeStatus.CLOSE
                     and neighbour.status != NodeStatus.START
                 ):
@@ -103,11 +104,12 @@ class AS_Map:
                         ):
                             neighbour.g = node.g + CROSS_COST
                             neighbours.append(neighbour)
+
         return neighbours
 
 
 class AStar:
-    def __init__(self, map: AS_Map, heuristicFunction) -> None:
+    def __init__(self, map: AS_Map, heuristicFunction=EuclideanHeuristic) -> None:
         self.startNode = map.nodes[map.env.startPoint.x][map.env.startPoint.y]
         self.targetNode = map.nodes[map.env.endPoint.x][map.env.endPoint.y]
         self.startNode.status = NodeStatus.START
@@ -129,14 +131,14 @@ class AStar:
             self.close.insert(currentNode)
             if currentNode != self.startNode:
                 currentNode.status = NodeStatus.CLOSE
-                self.map.env.closedPoints.append(Point(currentNode.x, currentNode.y))
+                self.map.env.appendClosePoint(Point(currentNode.x, currentNode.y))
             if currentNode == self.targetNode:
                 self.searching = False
-                # print(currentNode.f)
+                print("Cost: ", currentNode.f)
                 currentNode.status = NodeStatus.END
                 while currentNode.parent != self.startNode:
                     currentNode.parent.status = NodeStatus.DONE
-                    self.map.env.donePoints.append(
+                    self.map.env.appendDonePoint(
                         Point(currentNode.parent.x, currentNode.parent.y)
                     )
                     currentNode = currentNode.parent
@@ -144,10 +146,16 @@ class AStar:
                 Neighbours = []
                 Neighbours = self.map.GetNeighbours(currentNode)
                 for node in Neighbours:
-                    node.parent = currentNode
                     node.h = self.heuristicFunction(node, self.targetNode)
                     node.f = node.g + node.h
-                    node.status = NodeStatus.OPEN
-                    self.map.env.openedPoints.append(Point(node.x, node.y))
-                    self.open.insert(node)
+                    realNode = self.map.nodes[node.x][node.y]
+                    if node.f < realNode.f or realNode.status != NodeStatus.OPEN:
+                        realNode.g = node.g
+                        realNode.h = node.h
+                        realNode.f = node.f
+                        realNode.parent = currentNode
+                        if realNode.status != NodeStatus.OPEN:
+                            realNode.status = NodeStatus.OPEN
+                            self.map.env.appendOpenPoint(Point(node.x, node.y))
+                            self.open.insert(realNode)
             return True

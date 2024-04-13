@@ -1,11 +1,14 @@
-from component.enviroment import Enviroment
+from component.environment import Environment
 from component.map import CELL_STATE
 from component.point import Point
 from queue import Queue
 
+CROSS_COST = 2**0.5
+STRAIGHT_COST = 1
+
 
 class BFS:
-    def __init__(self, env: Enviroment) -> None:
+    def __init__(self, env: Environment) -> None:
         self.env = env
         self.open: Queue[list[Point]] = Queue()
         self.open.put([env.startPoint])
@@ -45,9 +48,21 @@ class BFS:
 
     def path_extend(self, cur_path, final_point: Point, directionX, directionY):
         relative_point = final_point.relative(directionX, directionY)
+
         if relative_point == self.env.endPoint:
             self.env.donePoints = cur_path + [relative_point]
             self.searching = False
+
+            cost = 0
+            for i in range(1, len(self.env.donePoints)):
+                cost = cost + (
+                    1
+                    if self.env.donePoints[i].x == self.env.donePoints[i - 1].x
+                    or self.env.donePoints[i].y == self.env.donePoints[i - 1].y
+                    else 2**0.5
+                )
+
+            print(f"Cost: {cost}")
         # todo: or or and
         elif (
             self.env.validatePositionByList(relative_point)

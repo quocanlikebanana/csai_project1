@@ -3,7 +3,7 @@ import sys
 import math
 import os
 
-from component.enviroment import Enviroment
+from component.environment import Environment
 from component.point import Point
 from graphics.color import BASE_COLOR
 
@@ -11,7 +11,7 @@ MAX_FPS = 100
 
 
 class Graphics:
-    def __init__(self, env: Enviroment, runDraw) -> None:
+    def __init__(self, env: Environment, drawAll) -> None:
         self.env = env
         self.MAR_X = 30
         self.MAR_Y = 30
@@ -34,14 +34,18 @@ class Graphics:
         self.blocksize_y = (windowHeight - self.MAR_Y * 2) / self.env.nrow
 
     def getScreenPosition(self, point: Point):
+        windowWidth, windowHeight = pygame.display.get_surface().get_size()
         left = self.MAR_X + self.blocksize_x * point.x
-        top = self.MAR_Y + self.blocksize_y * point.y
+        top = (
+            windowHeight - self.blocksize_y * point.y - self.blocksize_y
+        ) - self.MAR_Y
         return left, top
 
     def onEveryFrameDrawn(self):
         # self.env.updateMovement()
         if self.runAlgorithmOnce != None:
             self.runAlgorithmOnce()
+            pygame.time.delay(100)
         pass
 
     def run(self) -> None:
@@ -69,11 +73,12 @@ class Graphics:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
+                    return
+                    # sys.exit()
                 if event.type == pygame.VIDEORESIZE:
                     self.updateBlockSize()
-                if event.type == polygon_move_event:
-                    self.env.updateMovement()
+                if event.type == polygon_move_event and self.env.allowMove == True:
+                    self.env.moveAllPolygons()
 
     def renderGrid(self, cellBorderColor) -> None:
         for x in range(0, self.env.ncol):

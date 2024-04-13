@@ -1,8 +1,8 @@
 from algorithm.algorithm import Algorithm
-from component.enviroment import Enviroment
-from component.map import DIRECTION
+from component.environment import Environment
+from component.map import DIRECTION, stateTriggersFactory
 from component.point import Point
-from enum import Enum
+
 
 # Change IDS to DFS
 IDS_MODE = False
@@ -14,6 +14,7 @@ class IDS_Node:
         self.state = state
         self.cost = cost
         self.depth = depth
+        self.blocked = False
 
     def isSameState(self, node):
         if self.state == node.state:
@@ -29,8 +30,8 @@ class IDS_Node:
         )
 
 
-class IDS(Algorithm):
-    def __init__(self, env: Enviroment) -> None:
+class DFS(Algorithm):
+    def __init__(self, env: Environment) -> None:
         super().__init__(env)
         self.env = env
         self.MAX_LIM = 1000
@@ -39,8 +40,27 @@ class IDS(Algorithm):
         self.cost = None
         self.found = False
         self.step = 1
-        self.frontier: list[IDS_Node] = [IDS_Node(None, self.env.startPoint, 0, 0)]
-        self.env.appendClosePoint(self.env.startPoint)
+        self.subMap_Explored = [
+            [[] for _ in range(self.env.nrow)] for _ in range(self.env.ncol)
+        ]
+        self.frontier: list[DFS_Node] = [DFS_Node(None, self.env.startPoint, 0, 0)]
+        self.env.appendOpenPoint(self.env.startPoint)
+        self.env.injectTrigger(
+            stateTriggersFactory(
+                self._openToBlock, self._closeToBlock, self._blockToNone
+            )
+        )
+
+    def _openToBlock(self, p: Point):
+        self.frontier = [node for node in self.frontier if not node.state == p]
+        pass
+
+    def _closeToBlock(self, p: Point):
+
+        pass
+
+    def _blockToNone(self, p: Point):
+        pass
 
     def isDone(self):
         return self.cost != None
@@ -48,14 +68,14 @@ class IDS(Algorithm):
     def resetDFS(self):
         self.env.clearFinding()
         self.curLim += self.step
-        self.frontier: list[IDS_Node] = [IDS_Node(None, self.env.startPoint, 0, 0)]
-        self.env.appendClosePoint(self.env.startPoint)
+        self.frontier: list[DFS_Node] = [DFS_Node(None, self.env.startPoint, 0, 0)]
+        self.env.appendOpenPoint(self.env.startPoint)
 
     def searchOnce(self):
         if self.isDone() == True:
             return
         if self.curLim == self.MAX_LIM:
-            raise ValueError("ids max limit, ids not found")
+            raise ValueError("depth max limit, not found")
         if len(self.frontier) == 0:
             self.resetDFS()
         curNode = self.frontier.pop(0)
@@ -65,6 +85,7 @@ class IDS(Algorithm):
                 self.env.appendDonePoint(curNode.state)
                 self.cost += curNode.cost
                 curNode = curNode.parent
+            print(f"Cost: {self.cost}")
         else:
             if IDS_MODE == False or curNode.depth != self.curLim:
                 for dir in DIRECTION:
@@ -74,3 +95,4 @@ class IDS(Algorithm):
                         self.frontier.insert(0, child)  # dfs
                         self.env.appendOpenPoint(child.state)
             self.env.appendClosePoint(curNode.state)
+            self.subMap_Explored[curNode.state.x][curNode.state.y].append(curNode)

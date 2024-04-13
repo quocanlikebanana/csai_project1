@@ -1,8 +1,8 @@
 from algorithm.astar import *
 from algorithm.bfs import *
 from algorithm.dijkstra import Dijkstra
-from algorithm.dfs import IDS
-from component.enviroment import Enviroment
+from algorithm.dfs import DFS
+from component.environment import Environment
 from component.moving import ConstantOrbit, LinearOrbit, RatioOrbit
 from component.point import Point
 from component.polygon import Polygon
@@ -30,7 +30,7 @@ def test():
             # LinearOrbit([Point(0, 0), Point(2, 2)], 10),
         ),
     ]
-    env = Enviroment(30, 30, Point(1, 1), Point(28, 28), [], pl)
+    env = Environment(30, 30, Point(1, 1), Point(28, 28), [], pl)
 
     # BFS
     bfs = BFS(env)
