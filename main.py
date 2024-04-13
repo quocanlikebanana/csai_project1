@@ -149,7 +149,7 @@ if __name__ == "__main__":
     import io
 
     s = io.StringIO()
-    cProfile.run("test5()", "test_stats")
+    cProfile.run("test3()", "test_stats")
     ps = pstats.Stats("test_stats", stream=s)
     ps.sort_stats(SortKey.TIME).print_stats(0.20)
 

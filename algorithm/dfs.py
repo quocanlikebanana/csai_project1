@@ -94,7 +94,6 @@ class DFS(Algorithm):
                 for dir in DIRECTION:
                     if self.env.validatePathMove(curNode.state, dir) == True:
                         child = curNode.getChild(dir)
-                        # self.frontier.append(child)  # bfs
                         self.frontier.insert(0, child)  # dfs
                         self.env.appendOpenPoint(child.state)
             self.env.appendClosePoint(curNode.state)

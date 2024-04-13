@@ -1,3 +1,4 @@
+from component.moving import VeloOrbit
 from component.point import Point
 from component.polygon import Polygon
 from component.environment import Environment
@@ -42,14 +43,27 @@ class MapReader:
         # vertex of polygons
         self.polygons: list[Polygon] = []
         for i in range(0, self.number_of_polygons):
+            orbit = None
             index = i + 3
-            tmp = lines[index].split(",")
+            poly = lines[index].split("|")
+            if len(poly) > 1:
+                tmpvec = poly[1].split(",")
+                k = 0
+                list_vec = []
+                while k < len(tmpvec):
+                    list_vec.append(
+                        (float(tmpvec[k]), float(tmpvec[k + 1]), float(tmpvec[k + 2]))
+                    )
+                    k += 3
+                orbit = VeloOrbit(list_vec)
+            tmp = poly[0].split(",")
             list_point: list[Point] = []
             j = 0
             while j < len(tmp):
                 list_point.append(Point(tmp[j], tmp[j + 1]))
                 j = j + 2
-            self.polygons.append(Polygon(list_point))
+            self.polygons.append(Polygon(list_point, orbit))
+        pass
 
         E = Environment(
             self.width + 1,

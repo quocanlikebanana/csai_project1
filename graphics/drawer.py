@@ -19,10 +19,10 @@ class Drawer:
     def drawAll(self):
         # Order decides
         self.drawMapBorder()
-        self.drawPolygons()
         self.drawPickupPoints()
         self.drawOpened()
         self.drawClosed()
+        self.drawPolygons()
         self.drawDone()
         self.drawStartEndPoint()
         self.drawAgent(self.env.agentPoint)

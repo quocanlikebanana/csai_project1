@@ -215,13 +215,14 @@ class DStar(Algorithm):
     def onPolygonMove(self, points: list[Point]):
         # vẫn còn hơi conflict chỗ này do đang update point thì đa giác lại di chuyển
         self.affectedPoints = points
+        if len(self.affectedPoints) > 0:
+            self.env.closedPoints.clear()
 
     def searchOnce(self):
         if self.done == True:
             return
         if len(self.affectedPoints) > 0:
             self.env.allowMove = False
-            self.env.closedPoints.clear()
             for p in self.affectedPoints:
                 self.updateNode(self.map[p.x][p.y])
             self.done = False
