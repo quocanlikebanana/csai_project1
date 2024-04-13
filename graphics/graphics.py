@@ -27,6 +27,7 @@ class Graphics:
         self.clock = None
         self.drawAll = drawAll
         self.runAlgorithmOnce = None
+        self.updating = False
 
     def updateBlockSize(self):
         windowWidth, windowHeight = pygame.display.get_surface().get_size()
@@ -62,17 +63,18 @@ class Graphics:
         polygon_move_event = pygame.USEREVENT + 1
         pygame.time.set_timer(polygon_move_event, 1000)
         self.updateBlockSize()
-        # self.clock.tick(MAX_FPS)
+        self.clock.tick(MAX_FPS)
         # Loop
         while True:
             self.surface.fill(BASE_COLOR["WHITE"])
+            self.updating = True
             try:
                 self.onEveryFrameDrawn()
             except ValueError as e:
                 print(str(e))
             self.drawAll()
             pygame.display.update()
-            # pygame.time.delay(100)
+            self.updating = False
             # Event
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -81,7 +83,11 @@ class Graphics:
                     # sys.exit()
                 if event.type == pygame.VIDEORESIZE:
                     self.updateBlockSize()
-                if event.type == polygon_move_event and self.env.allowMove == True:
+                if (
+                    event.type == polygon_move_event
+                    and self.env.allowMove == True
+                    and self.updating == False
+                ):
                     self.env.moveAllPolygons()
 
     def renderGrid(self, cellBorderColor) -> None:

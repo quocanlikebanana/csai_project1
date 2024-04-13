@@ -131,6 +131,7 @@ class Drawer:
                 self.graphics.renderFilledPixel(
                     p, self.polycolors[i % len(self.polycolors)]
                 )
+                self.graphics.renderSymbolPixel(p, "x")
 
     def drawOpened(self):
         for p in self.env.openedPoints:
