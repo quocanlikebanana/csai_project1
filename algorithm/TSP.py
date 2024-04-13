@@ -212,7 +212,7 @@ class TSP:
                 self.Dist[i][j] = cost
                 self.Dist[j][i] = cost
         self.c = [i for i in range(len(self.listV))]
-        self.endIndex = len(self.listV)
+        self.endIndex = len(self.listV) - 1 
         self.minCost, self.path = self.tsp(self.c, 0)
         self.currentVIndex = 0
 
@@ -243,7 +243,6 @@ class TSP:
         subArr.remove(v)
         minCost = float("inf")
         path = []
-
         for i in subArr:
             if i != self.endIndex:
                 cost, subPath = self.tsp(subArr, i)
