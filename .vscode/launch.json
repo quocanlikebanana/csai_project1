@@ -5,7 +5,8 @@
             "name": "Python Debugger: Module Input",
             "type": "debugpy",
             "request": "launch",
-            "module": "input.input"
+            "module": "input.input",
+            "console": "externalTerminal"
         },
         {
             "name": "Python Debugger: Module Main",

@@ -66,13 +66,13 @@ class Graphics:
         # Loop
         while True:
             self.surface.fill(BASE_COLOR["WHITE"])
-            self.drawAll()
             try:
                 self.onEveryFrameDrawn()
             except ValueError as e:
                 print(str(e))
+            self.drawAll()
             pygame.display.update()
-            # pygame.time.delay(200)
+            # pygame.time.delay(100)
             # Event
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
