@@ -152,7 +152,7 @@ def Astar(map: AS_Map, startPoint, endPoint, heuristicFunction):
     cost = 0
     while searching:
         if open.isEmpty():
-            raise ValueError("astar not found")
+            raise ValueError("AStar|TSP not found")
         currentNode = open.delete()
 
         close.insert(currentNode)

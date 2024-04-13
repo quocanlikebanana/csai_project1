@@ -18,6 +18,7 @@ class Dijkstra:
             return False
         else:
             if not self.open:
+                self.searching = False
                 raise ValueError("Dijkstra not found")
 
             current_point: Point

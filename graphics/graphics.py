@@ -67,14 +67,17 @@ class Graphics:
         while True:
             self.surface.fill(BASE_COLOR["WHITE"])
             self.drawAll()
-            self.onEveryFrameDrawn()
+            try:
+                self.onEveryFrameDrawn()
+            except ValueError as e:
+                print(str(e))
             pygame.display.update()
             # pygame.time.delay(200)
             # Event
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    return
+                    return True
                     # sys.exit()
                 if event.type == pygame.VIDEORESIZE:
                     self.updateBlockSize()

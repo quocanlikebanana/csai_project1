@@ -20,6 +20,7 @@ class BFS:
             return False
         else:
             if self.open.empty():
+                self.searching = False
                 raise ValueError("BFS not found")
 
             cur_path = self.open.get()

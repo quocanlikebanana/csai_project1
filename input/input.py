@@ -109,19 +109,24 @@ class Input:
                                             self.file_path
                                         ).create_environment()
                                         self.algorithm = int(self.algorithm)
-                                        run_algorithm = create_algorithm(
-                                            env, self.level, self.algorithm
-                                        )
-                                        Main(env, run_algorithm.searchOnce).run()
-
+                                        try:
+                                            run_algorithm = create_algorithm(
+                                                env, self.level, self.algorithm
+                                            )
+                                            Main(env, run_algorithm.searchOnce).run()
+                                        except ValueError as e:
+                                            print(str(e))
                                         self.algorithm = 0
                             else:
                                 # print("gọi lệnh chạy mức 1,3,4\n")
                                 env = MapReader(self.file_path).create_environment()
-                                run_algorithm = create_algorithm(
-                                    env, self.level, self.algorithm
-                                )
-                                Main(env, run_algorithm.searchOnce).run()
+                                try:
+                                    run_algorithm = create_algorithm(
+                                        env, self.level, self.algorithm
+                                    )
+                                    Main(env, run_algorithm.searchOnce).run()
+                                except ValueError as e:
+                                    print(str(e))
 
                         self.file_path = ""
 

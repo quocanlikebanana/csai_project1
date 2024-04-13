@@ -33,6 +33,7 @@ class DFS_Node:
 class DFS(Algorithm):
     def __init__(self, env: Environment) -> None:
         super().__init__(env)
+        self.searching = True
         self.env = env
         self.MAX_LIM = 1000
         self.curLim = 0
@@ -72,15 +73,17 @@ class DFS(Algorithm):
         self.env.appendOpenPoint(self.env.startPoint)
 
     def searchOnce(self):
-        if self.isDone() == True:
+        if self.searching == False:
             return
-        if self.curLim == self.MAX_LIM:
-            raise ValueError("depth max limit, not found")
         if len(self.frontier) == 0:
-            self.resetDFS()
+            self.searching = False
+            raise ValueError("DFS not found")
+        # if len(self.frontier) == 0:
+        #     self.resetDFS()
         curNode = self.frontier.pop(0)
         if curNode.state == self.env.endPoint:
             self.cost = 0
+            self.searching = False
             while curNode.parent != None:
                 self.env.appendDonePoint(curNode.state)
                 self.cost += curNode.cost

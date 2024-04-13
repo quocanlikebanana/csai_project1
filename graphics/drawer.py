@@ -13,7 +13,7 @@ class Drawer:
         self.graphics = Graphics(env, self.drawAll)
 
     def run(self):
-        self.graphics.run()
+        return self.graphics.run()
 
     # Old draw function
     def drawAll(self):

@@ -17,7 +17,7 @@ class Main:
         pass
 
     def run(self):
-        self.drawer.run()
+        return self.drawer.run()
 
 
 def test():
