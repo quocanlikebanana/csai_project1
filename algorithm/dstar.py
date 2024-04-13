@@ -14,6 +14,7 @@ class DS_Node:
         self.blocked = False
         self.successorGradient: DS_Node = None
         self.charSymbol = "·"
+        self.dirCost = 0
         pass
 
     # Key != f; k = [k(1), k(2)]
@@ -119,6 +120,7 @@ class DStar(Algorithm):
         ]
         self.env.onPolygonMoveTrigger = self.onPolygonMove
         self.affectedPoints: list[Point] = []
+        self.cost = 0
         self.init()
         self.computePath()
         self.findPath()
@@ -171,8 +173,8 @@ class DStar(Algorithm):
             for p in pre:
                 self.updateNode(p[0])
             pass
-        print("=" * 50)
-        printMapDir(self.map)
+        # print("=" * 50)
+        # printMapDir(self.map)
         # print("*" * 10)
         # printEnvMap(self.env.map)
         # print("=" * 50)
@@ -182,20 +184,24 @@ class DStar(Algorithm):
         if node.state != self.goalNode.state:
             suc = self.getAdjacent(node)
             node.successorGradient = None
+            node.dirCost = 0
             node.charSymbol = "·"
             # Note: min here doesnt include itself
             if len(suc) > 0:
                 minrhs = suc[0][0].g + suc[0][1]
                 sucGrad = suc[0][0]
+                dirCost = suc[0][1]
                 charSym = suc[0][2]
                 for s in suc:
                     if s[0].g + s[1] < minrhs:
                         minrhs = s[0].g + s[1]
                         sucGrad = s[0]
+                        dirCost = s[1]
                         charSym = s[2]
                 node.rhs = minrhs
                 if minrhs != math.inf:
                     node.successorGradient = sucGrad
+                    node.dirCost = dirCost
                     node.charSymbol = charSym
             # if node.isConsistent() == False:
             #     self.frontier.update(node)
@@ -225,15 +231,17 @@ class DStar(Algorithm):
             self.env.allowMove = True
         if self.agentNode.state != self.goalNode.state:
             if self.agentNode.g == math.inf:
-                # raise ValueError("dstar not found")
+                print("agent currently can't find a way to goal")
                 pass
             else:
-                # If path still found
+                print(f"agent moving, current cost: {self.agentNode.g}")
                 self.env.donePoints.append(self.agentNode.state)
+                self.cost += self.agentNode.dirCost
                 self.agentNode = self.agentNode.successorGradient
                 self.env.agentPoint = self.agentNode.state
         else:
             self.done = True
+            print(f"Final cost: {self.cost} (x10 block cost)")
         pass
 
     def findPath(self):

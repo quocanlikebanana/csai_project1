@@ -2,10 +2,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Module",
+            "name": "Python Debugger: Module Input",
             "type": "debugpy",
             "request": "launch",
             "module": "input.input"
+        },
+        {
+            "name": "Python Debugger: Module Main",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "main"
         },
         {
             "name": "Python Debugger: Python File",

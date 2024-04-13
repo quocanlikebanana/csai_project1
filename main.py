@@ -21,7 +21,7 @@ class Main:
 
 
 def test():
-    env = Enviroment(
+    env = Environment(
         30,
         30,
         Point(1, 1),
@@ -59,7 +59,7 @@ def test():
 
 
 def test2():
-    env = Enviroment(
+    env = Environment(
         30,
         20,
         Point(3, 2),
@@ -81,7 +81,7 @@ def test2():
 
 
 def test3():
-    env = Enviroment(
+    env = Environment(
         30,
         20,
         Point(3, 2),
@@ -99,7 +99,7 @@ def test3():
 
 
 def test4():
-    env = Enviroment(
+    env = Environment(
         30,
         20,
         Point(1, 18),
@@ -118,7 +118,7 @@ def test4():
 
 
 def test5():
-    env = Enviroment(
+    env = Environment(
         30,
         20,
         Point(1, 18),
